@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<!-- saved from url=(0084)file:///C:/Users/Resource%20Hub%20Guest/Downloads/Call%20Center%20App%20Example.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anchor Point Resource Hub – Recuperative Care (Call Center App)</title>
+
+  <style>
+    /* ---------- THEME ---------- */
+    :root{
+      --bg: #0b1220;
+      --panel: #101a2e;
+      --panel2: #0f172a;
+      --card: #0b1326;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --line: rgba(148,163,184,0.18);
+      --teal: #2dd4bf;
+      --teal2:#14b8a6;
+      --amber:#fbbf24;
+      --red:#fb7185;
+      --green:#34d399;
+      --chip:#0b2034;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 16px;
+    }
+
+    *{ box-sizing: border-box; }
+    html, body{ height: 100%; }
+    body{
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: radial-gradient(1200px 700px at 20% 10%, rgba(45,212,191,.14), transparent 55%),
+                  radial-gradient(900px 600px at 80% 20%, rgba(59,130,246,.12), transparent 55%),
+                  linear-gradient(180deg, var(--bg), #070b14);
+      color: var(--text);
+    }
+
+    a{ color: inherit; }
+    .wrap{
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 18px 18px 40px;
+    }
+
+    /* ---------- TOP BAR ---------- */
+    .topbar{
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(16,26,46,.75);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 12px;
+      z-index: 10;
+    }
+    .brand{
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      min-width: 260px;
+    }
+    .logo{
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--teal), rgba(59,130,246,.75));
+      box-shadow: 0 10px 20px rgba(0,0,0,.25);
+    }
+    .brand h1{
+      margin: 0;
+      font-size: 14px;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+      color: #dbeafe;
+    }
+    .brand .sub{
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .controls{
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 10px;
+      align-items: center;
+      width: min(760px, 100%);
+    }
+
+    .search{
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 10px 12px;
+      background: rgba(15,23,42,.65);
+    }
+    .search input{
+      width: 100%;
+      border: 0;
+      outline: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 14px;
+    }
+    .search input::placeholder{ color: rgba(148,163,184,.75); }
+
+    .btn{
+      border: 1px solid var(--line);
+      background: rgba(15,23,42,.65);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 14px;
+      cursor: pointer;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform .05s ease, border-color .15s ease, background .15s ease;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .btn:hover{ border-color: rgba(45,212,191,.45); background: rgba(15,23,42,.85); }
+    .btn:active{ transform: translateY(1px); }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(45,212,191,.22), rgba(59,130,246,.18));
+      border-color: rgba(45,212,191,.45);
+    }
+
+    /* ---------- LAYOUT ---------- */
+    .grid{
+      display: grid;
+      grid-template-columns: 1.35fr .65fr;
+      gap: 14px;
+      margin-top: 14px;
+      align-items: start;
+    }
+
+    /* ---------- LEFT: RESULTS ---------- */
+    .panel{
+      border: 1px solid var(--line);
+      background: rgba(16,26,46,.55);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .panel-header{
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: rgba(11,19,38,.8);
+      border-bottom: 1px solid var(--line);
+    }
+    .panel-header .title{
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+      color: #e0f2fe;
+    }
+    .panel-header .meta{
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .chip{
+      background: rgba(45,212,191,.10);
+      color: #99f6e4;
+      border: 1px solid rgba(45,212,191,.22);
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .list{
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .card{
+      border: 1px solid var(--line);
+      background: rgba(11,19,38,.55);
+      border-radius: 14px;
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+      cursor: pointer;
+      transition: border-color .15s ease, background .15s ease, transform .05s ease;
+    }
+    .card:hover{
+      border-color: rgba(45,212,191,.40);
+      background: rgba(11,19,38,.75);
+    }
+    .card:active{ transform: translateY(1px); }
+    .card.active{
+      border-color: rgba(45,212,191,.65);
+      box-shadow: 0 0 0 2px rgba(45,212,191,.12) inset;
+    }
+
+    .row{
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+    .org{
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+    .tag{
+      background: rgba(148,163,184,.08);
+      border: 1px solid rgba(148,163,184,.18);
+      color: #d1d5db;
+      font-size: 12px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      white-space: nowrap;
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .tag.urgent{
+      background: rgba(251,191,36,.10);
+      border-color: rgba(251,191,36,.22);
+      color: #fde68a;
+    }
+    .tag.immediate{
+      background: rgba(251,113,133,.10);
+      border-color: rgba(251,113,133,.25);
+      color: #fecdd3;
+    }
+    .tag.ongoing{
+      background: rgba(52,211,153,.10);
+      border-color: rgba(52,211,153,.22);
+      color: #bbf7d0;
+    }
+
+    .subgrid{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 10px;
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+    .subgrid b{ color: var(--text); font-weight: 700; }
+    .desc{
+      font-size: 13px;
+      color: #d1d5db;
+      line-height: 1.35;
+    }
+
+    .actions{
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .action{
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(148,163,184,.18);
+      background: rgba(15,23,42,.55);
+      padding: 8px 10px;
+      border-radius: 12px;
+      font-size: 12.5px;
+      color: #e5e7eb;
+      text-decoration: none;
+      user-select: none;
+    }
+    .action:hover{ border-color: rgba(45,212,191,.35); }
+    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+
+    /* ---------- RIGHT: DETAILS + SCRIPT ---------- */
+    .side{
+      border: 1px solid var(--line);
+      background: rgba(16,26,46,.55);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: sticky;
+      top: 92px;
+    }
+    .side .head{
+      padding: 12px 14px;
+      background: rgba(11,19,38,.8);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .side .head .h{
+      font-weight: 800;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+      font-size: 12.5px;
+      color: #e0f2fe;
+    }
+    .side .body{
+      padding: 12px 14px 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .kv{
+      display: grid;
+      gap: 6px;
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+    .kv div{ display: flex; gap: 10px; justify-content: space-between; }
+    .kv b{ color: var(--text); font-weight: 700; }
+
+    .script{
+      border: 1px solid rgba(148,163,184,.18);
+      background: rgba(15,23,42,.55);
+      border-radius: 14px;
+      padding: 10px 10px;
+    }
+    .script h3{
+      margin: 0 0 6px 0;
+      font-size: 12.5px;
+      text-transform: uppercase;
+      letter-spacing: .3px;
+      color: #c7d2fe;
+    }
+    .script p{
+      margin: 0;
+      font-size: 12.5px;
+      color: #d1d5db;
+      line-height: 1.35;
+    }
+    .small{
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    /* ---------- MOBILE FALLBACK (still works) ---------- */
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+      .side{ position: static; top: auto; }
+      .controls{ grid-template-columns: 1fr; }
+      .brand{ min-width: unset; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>Anchor Point – Resource Hub</h1>
+          <div class="sub">Call Center App • Recuperative Care &amp; Medical Respite</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="search" role="search">
+          <span style="color:var(--muted);font-size:14px;">🔎</span>
+          <input id="q" type="text" placeholder="Search by organization, location, population, notes…" autocomplete="off">
+        </div>
+
+        <button class="btn" id="clearBtn" type="button">✖ Clear</button>
+        <button class="btn primary" id="copyBtn" type="button">📋 Copy selected details</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- LEFT: RESULT LIST -->
+      <section class="panel" aria-label="Directory results">
+        <div class="panel-header">
+          <div class="title">Directory</div>
+          <div class="meta">
+            <span class="chip" id="countChip">6 programs</span>
+            <span style="color:var(--muted);font-size:12px;">Tip: click a card to open details</span>
+          </div>
+        </div>
+
+        <div class="list" id="list"><div class="card active" tabindex="0">
+          <div class="row">
+            <div>
+              <div class="org">Father Joe’s Villages – Medical Respite Program</div>
+              <div style="margin-top:4px;color:var(--muted);font-size:12.5px;">Medical Respite / Recuperative Care</div>
+            </div>
+            <div class="tag urgent">Urgent (Business Hours)</div>
+          </div>
+
+          <div class="subgrid">
+            <div><b>Phone:</b> <span class="mono">619-233-8500</span></div>
+            <div><b>Location:</b> San Diego, CA</div>
+            <div><b>Population:</b> Adults experiencing homelessness</div>
+            <div><b>Hours:</b> Business Hours (Residential 24/7)</div>
+          </div>
+
+          <div class="desc">Short-term medical respite care after hospital discharge; recovery support and case coordination.</div>
+
+          <div class="actions">
+            
+              <a class="action" href="tel:6192338500">📞 Call</a>
+            
+              <a class="action" href="https://my.neighbor.org/" target="_blank" rel="noopener">🌐 Open website</a>
+            
+              <a class="action" href="file:///C:/Users/Resource%20Hub%20Guest/Downloads/Call%20Center%20App%20Example.html#">📋 Copy row</a>
+            
+          </div>
+        </div><div class="card" tabindex="0">
+          <div class="row">
+            <div>
+              <div class="org">Alpha Project – Recuperative Care Program</div>
+              <div style="margin-top:4px;color:var(--muted);font-size:12.5px;">Medical Respite / Recuperative Care</div>
+            </div>
+            <div class="tag urgent">Urgent (Business Hours)</div>
+          </div>
+
+          <div class="subgrid">
+            <div><b>Phone:</b> <span class="mono">619-542-1877</span></div>
+            <div><b>Location:</b> San Diego County</div>
+            <div><b>Population:</b> Adults experiencing homelessness</div>
+            <div><b>Hours:</b> Business Hours (Residential 24/7)</div>
+          </div>
+
+          <div class="desc">Medical respite services for post-hospital recovery; basic needs and support services.</div>
+
+          <div class="actions">
+            
+              <a class="action" href="tel:6195421877">📞 Call</a>
+            
+              <a class="action" href="https://www.alphaproject.org/" target="_blank" rel="noopener">🌐 Open website</a>
+            
+              <a class="action" href="file:///C:/Users/Resource%20Hub%20Guest/Downloads/Call%20Center%20App%20Example.html#">📋 Copy row</a>
+            
+          </div>
+        </div><div class="card" tabindex="0">
+          <div class="row">
+            <div>
+              <div class="org">Interfaith Community Services – Recuperative Care</div>
+              <div style="margin-top:4px;color:var(--muted);font-size:12.5px;">Medical Respite / Recuperative Care</div>
+            </div>
+            <div class="tag urgent">Urgent (Business Hours)</div>
+          </div>
+
+          <div class="subgrid">
+            <div><b>Phone:</b> <span class="mono">760-489-6380</span></div>
+            <div><b>Location:</b> North County San Diego</div>
+            <div><b>Population:</b> Adults experiencing homelessness</div>
+            <div><b>Hours:</b> Business Hours (Residential 24/7)</div>
+          </div>
+
+          <div class="desc">Short-term medical respite and case management in North County.</div>
+
+          <div class="actions">
+            
+              <a class="action" href="tel:7604896380">📞 Call</a>
+            
+              <a class="action" href="https://www.interfaithservices.org/" target="_blank" rel="noopener">🌐 Open website</a>
+            
+              <a class="action" href="file:///C:/Users/Resource%20Hub%20Guest/Downloads/Call%20Center%20App%20Example.html#">📋 Copy row</a>
+            
+          </div>
+        </div><div class="card" tabindex="0">
+          <div class="row">
+            <div>
+              <div class="org">Neighborhood Healthcare – Recuperative Care Partnership</div>
+              <div style="margin-top:4px;color:var(--muted);font-size:12.5px;">Medical Respite / Recuperative Care</div>
+            </div>
+            <div class="tag urgent">Urgent (Business Hours)</div>
+          </div>
+
+          <div class="subgrid">
+            <div><b>Phone:</b> <span class="mono">833-867-4642</span></div>
+            <div><b>Location:</b> San Diego County</div>
+            <div><b>Population:</b> Adults experiencing homelessness</div>
+            <div><b>Hours:</b> Business Hours</div>
+          </div>
+
+          <div class="desc">Clinic-linked recuperative care coordination and post-discharge recovery support.</div>
+
+          <div class="actions">
+            
+              <a class="action" href="tel:8338674642">📞 Call</a>
+            
+              <a class="action" href="https://www.nhcare.org/" target="_blank" rel="noopener">🌐 Open website</a>
+            
+              <a class="action" href="file:///C:/Users/Resource%20Hub%20Guest/Downloads/Call%20Center%20App%20Example.html#">📋 Copy row</a>
+            
+          </div>
+        </div><div class="card" tabindex="0">
+          <div class="row">
+            <div>
+              <div class="org">San Diego County HHSA – Medical Respite Coordination</div>
+              <div style="margin-top:4px;color:var(--muted);font-size:12.5px;">Medical Respite / Recuperative Care</div>
+            </div>
+            <div class="tag urgent">Urgent (Business Hours)</div>
+          </div>
+
+          <div class="subgrid">
+            <div><b>Phone:</b> <span class="mono">866-262-9881</span></div>
+            <div><b>Location:</b> San Diego County</div>
+            <div><b>Population:</b> Homeless adults discharged from hospital</div>
+            <div><b>Hours:</b> Business Hours</div>
+          </div>
+
+          <div class="desc">County coordination of contracted recuperative care placements.</div>
+
+          <div class="actions">
+            
+              <a class="action" href="tel:8662629881">📞 Call</a>
+            
+              <a class="action" href="https://www.sandiegocounty.gov/hhsa/" target="_blank" rel="noopener">🌐 Open website</a>
+            
+              <a class="action" href="file:///C:/Users/Resource%20Hub%20Guest/Downloads/Call%20Center%20App%20Example.html#">📋 Copy row</a>
+            
+          </div>
+        </div><div class="card" tabindex="0">
+          <div class="row">
+            <div>
+              <div class="org">Horizon Community Services</div>
+              <div style="margin-top:4px;color:var(--muted);font-size:12.5px;">Medical Respite / Recuperative Care</div>
+            </div>
+            <div class="tag urgent">Urgent (Business Hours)</div>
+          </div>
+
+          <div class="subgrid">
+            <div><b>Phone:</b> <span class="mono">619-286-7222</span></div>
+            <div><b>Location:</b> San Diego County</div>
+            <div><b>Population:</b> Adults experiencing homelessness</div>
+            <div><b>Hours:</b> Residential 24/7 (Referral Required)</div>
+          </div>
+
+          <div class="desc">Short-term recuperative care with medical recovery support and case management.</div>
+
+          <div class="actions">
+            
+              <a class="action" href="tel:6192867222">📞 Call</a>
+            
+              <a class="action" href="https://horizoncsd.org/services/" target="_blank" rel="noopener">🌐 Open website</a>
+            
+              <a class="action" href="mailto:info@horizoncsd.org">✉️ Email</a>
+            
+          </div>
+        </div></div>
+      </section>
+
+      <!-- RIGHT: DETAILS / SCRIPT -->
+      <aside class="side" aria-label="Selected program details">
+        <div class="head">
+          <div class="h">Selected program</div>
+          <span class="chip" id="urgencyChip" style="border-color: rgba(251, 191, 36, 0.3);">Urgent (Business Hours)</span>
+        </div>
+
+        <div class="body">
+          <div>
+            <div id="selOrg" style="font-size:15px;font-weight:900;margin-bottom:2px;">Father Joe’s Villages – Medical Respite Program</div>
+            <div id="selSvc" class="small">Medical Respite / Recuperative Care</div>
+          </div>
+
+          <div class="kv" id="kv">
+        <div><span>Phone</span><b class="mono">619-233-8500</b></div>
+        <div><span>Population</span><b>Adults experiencing homelessness</b></div>
+        <div><span>Location</span><b>San Diego, CA</b></div>
+        <div><span>Hours</span><b>Business Hours (Residential 24/7)</b></div>
+        <div><span>Website</span><b><a href="https://my.neighbor.org/" target="_blank" rel="noopener">https://my.neighbor.org</a></b></div>
+        <div><span>Email</span><b>—</b></div>
+        <div><span>Audit date</span><b>03-02-26</b></div>
+      </div>
+
+<div class="script">
+  <h3>Anchor Point – Interactive Call Script</h3>
+
+  <div id="scriptContainer">
+    <div id="scriptPrompt" class="small" style="margin-bottom:10px;"></div>
+
+    <div id="scriptButtons" style="display:flex; gap:8px; flex-wrap:wrap;"></div>
+
+    <div style="margin-top:10px;">
+      <button class="btn" onclick="resetScript()">↺ Restart Script</button>
+    </div>
+  </div>
+</div>
+          <div>
+            <div class="actions" id="actions"><a class="action" href="tel:6192338500">📞 Call</a><a class="action" href="https://my.neighbor.org/" target="_blank" rel="noopener">🌐 Open website</a><a class="action" href="file:///C:/Users/Resource%20Hub%20Guest/Downloads/Call%20Center%20App%20Example.html#">📋 Copy row</a></div>
+            <div class="small" style="margin-top:8px;">
+              <b>Internal note:</b> This view is built for call center staff (quick search + click-to-copy details).
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+<script>
+  /* =========================
+     DATA (edit/extend here)
+     ========================= */
+  const DATA = [
+    {
+      serviceFunction: "Medical Respite / Recuperative Care",
+      organization: "Father Joe’s Villages – Medical Respite Program",
+      phoneDisplay: "619-233-8500",
+      phoneDial: "6192338500",
+      urgency: "Urgent (Business Hours)",
+      population: "Adults experiencing homelessness",
+      description: "Short-term medical respite care after hospital discharge, recovery support and case coordination.",
+      location: "San Diego, CA",
+      hours: "Business Hours (Residential 24/7)",
+      website: "https://my.neighbor.org",
+      email: "",
+      notes: "Hospital referral required, homeless-serving.",
+      auditDate: "03-02-26"
+    },
+    {
+      serviceFunction: "Medical Respite / Recuperative Care",
+      organization: "Alpha Project – Recuperative Care Program",
+      phoneDisplay: "619-542-1877",
+      phoneDial: "6195421877",
+      urgency: "Urgent (Business Hours)",
+      population: "Adults experiencing homelessness",
+      description: "Medical respite services for post-hospital recovery, basic needs and support services.",
+      location: "San Diego County",
+      hours: "Business Hours (Residential 24/7)",
+      website: "https://www.alphaproject.org",
+      email: "",
+      notes: "Referral typically from hospital or provider.",
+      auditDate: "03-02-26"
+    },
+    {
+      serviceFunction: "Medical Respite / Recuperative Care",
+      organization: "Interfaith Community Services – Recuperative Care",
+      phoneDisplay: "760-489-6380",
+      phoneDial: "7604896380",
+      urgency: "Urgent (Business Hours)",
+      population: "Adults experiencing homelessness",
+      description: "Short-term medical respite and case management in North County.",
+      location: "North County San Diego",
+      hours: "Business Hours (Residential 24/7)",
+      website: "https://www.interfaithservices.org",
+      email: "",
+      notes: "North County medical respite.",
+      auditDate: "03-02-26"
+    },
+    {
+      serviceFunction: "Medical Respite / Recuperative Care",
+      organization: "Neighborhood Healthcare – Recuperative Care Partnership",
+      phoneDisplay: "833-867-4642",
+      phoneDial: "8338674642",
+      urgency: "Urgent (Business Hours)",
+      population: "Adults experiencing homelessness",
+      description: "Clinic-linked recuperative care coordination and post-discharge recovery support.",
+      location: "San Diego County",
+      hours: "Business Hours",
+      website: "https://www.nhcare.org",
+      email: "",
+      notes: "Clinic-based referral coordination.",
+      auditDate: "03-02-26"
+    },
+    {
+      serviceFunction: "Medical Respite / Recuperative Care",
+      organization: "San Diego County HHSA – Medical Respite Coordination",
+      phoneDisplay: "866-262-9881",
+      phoneDial: "8662629881",
+      urgency: "Urgent (Business Hours)",
+      population: "Homeless adults discharged from hospital",
+      description: "County coordination of contracted recuperative care placements.",
+      location: "San Diego County",
+      hours: "Business Hours",
+      website: "https://www.sandiegocounty.gov/hhsa/",
+      email: "",
+      notes: "Access via hospital discharge planning or ACL.",
+      auditDate: "03-02-26"
+    },
+    {
+      serviceFunction: "Medical Respite / Recuperative Care",
+      organization: "Horizon Community Services",
+      phoneDisplay: "619-286-7222",
+      phoneDial: "6192867222",
+      urgency: "Urgent (Business Hours)",
+      population: "Adults experiencing homelessness",
+      description: "Short-term recuperative care with medical recovery support and case management.",
+      location: "San Diego County",
+      hours: "Residential 24/7 (Referral Required)",
+      website: "https://horizoncsd.org/services/",
+      email: "info@horizoncsd.org",
+      notes: "Referral required, confirm intake process.",
+      auditDate: "03-02-26"
+    }
+  ];
+
+  /* =========================
+     HELPERS
+     ========================= */
+  const $ = (id) => document.getElementById(id);
+
+  function urgencyClass(u) {
+    const s = (u || "").toLowerCase();
+    if (s.includes("immediate")) return "immediate";
+    if (s.includes("urgent")) return "urgent";
+    return "ongoing";
+  }
+
+  function buildActions(item) {
+    const actions = [];
+    if (item.phoneDial) actions.push({ label: "📞 Call", href: `tel:${item.phoneDial}` });
+    if (item.website) actions.push({ label: "🌐 Open website", href: item.website, target: "_blank" });
+    if (item.email) actions.push({ label: "✉️ Email", href: `mailto:${item.email}` });
+    actions.push({ label: "📋 Copy row", href: "#", copy: true });
+    return actions;
+  }
+
+  function formatForCopy(item) {
+    return [
+      `Organization: ${item.organization}`,
+      `Service: ${item.serviceFunction}`,
+      `Phone: ${item.phoneDisplay || ""}`,
+      `Urgency: ${item.urgency || ""}`,
+      `Population: ${item.population || ""}`,
+      `Location: ${item.location || ""}`,
+      `Hours: ${item.hours || ""}`,
+      `Website: ${item.website || ""}`,
+      `Email: ${item.email || ""}`,
+      `Notes: ${item.notes || ""}`,
+      `Audit Date: ${item.auditDate || ""}`
+    ].join("\n");
+  }
+
+  async function copyText(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch (e) {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      return true;
+    }
+  }
+
+  /* =========================
+     ANCHOR POINT DECISION TREE
+     (no nested <script>, all nodes defined)
+     ========================= */
+  const SCRIPT_TREE = {
+    start: {
+      prompt: "Greeting: Thank you for calling Anchor Point. Are you calling for yourself?",
+      options: [
+        { label: "Yes", next: "immediateDangerCheck" },
+        { label: "No", next: "thirdPartyInfo" }
+      ]
+    },
+
+    thirdPartyInfo: {
+      prompt: "Is the person with you right now?",
+      options: [
+        { label: "Yes", next: "immediateDangerCheck" },
+        { label: "No", next: "infoOnly" }
+      ]
+    },
+
+    infoOnly: {
+      prompt: "Understood. I can provide information and referrals. What is the primary need?",
+      options: [
+        { label: "Homeless resources", next: "housingStatus" },
+        { label: "Substance use", next: "substanceAssessment" },
+        { label: "Mental health", next: "mentalHealthAssessment" },
+        { label: "ECTLC info", next: "ectlcInfo" }
+      ]
+    },
+
+    immediateDangerCheck: {
+      prompt: "Is anyone in immediate medical danger right now?",
+      options: [
+        { label: "Yes", next: "emergencyRedirect" },
+        { label: "No", next: "housingStatus" }
+      ]
+    },
+
+    emergencyRedirect: {
+      prompt: "Please call 911 immediately. If this is a mental health crisis, you can call 988. Do you want to stay on the line while you place the call?",
+      options: [
+        { label: "Yes", next: "holdSupport" },
+        { label: "No", next: "end" }
+      ]
+    },
+
+    holdSupport: {
+      prompt: "Stay on the line. Document what was reported and the time. Follow transfer policy if needed.",
+      options: [{ label: "Finish", next: "end" }]
+    },
+
+    housingStatus: {
+      prompt: "Are you currently experiencing homelessness?",
+      options: [
+        { label: "Yes", next: "sleepingLocation" },
+        { label: "No", next: "primaryNeed" }
+      ]
+    },
+
+    sleepingLocation: {
+      prompt: "Where did you sleep last night?",
+      options: [
+        { label: "Street / Vehicle", next: "assessShelter" },
+        { label: "Shelter", next: "primaryNeed" },
+        { label: "Hospital Discharge", next: "recuperativeCare" }
+      ]
+    },
+
+    recuperativeCare: {
+      prompt: "Was the discharge within the last 24 hours?",
+      options: [
+        { label: "Yes", next: "recuperativeReferral" },
+        { label: "No", next: "primaryNeed" }
+      ]
+    },
+
+    recuperativeReferral: {
+      prompt: "Do you have discharge paperwork available (or can you get it from the hospital)?",
+      options: [
+        { label: "Yes", next: "collectDocs" },
+        { label: "No", next: "instructDocs" }
+      ]
+    },
+
+    collectDocs: {
+      prompt: "Collect: discharge date, diagnosis, mobility limits, wound care needs, meds, insurance, and referral source. Then route to medical respite programs in the directory.",
+      options: [{ label: "Finish", next: "end" }]
+    },
+
+    instructDocs: {
+      prompt: "To place in medical respite, we need discharge paperwork. Ask them to request it from the hospital discharge planner or medical records.",
+      options: [{ label: "Finish", next: "end" }]
+    },
+
+    assessShelter: {
+      prompt: "Are you open to emergency shelter tonight?",
+      options: [
+        { label: "Yes", next: "shelterLookup" },
+        { label: "No", next: "harmReduction" }
+      ]
+    },
+
+    shelterLookup: {
+      prompt: "Use the database to provide the closest shelter options and their intake process. Confirm ID requirements, arrival time, and transportation options.",
+      options: [{ label: "Finish", next: "end" }]
+    },
+
+    harmReduction: {
+      prompt: "Provide safer-sleeping guidance and outreach resources. Offer locations for day services, food, hygiene, and charging.",
+      options: [{ label: "Finish", next: "end" }]
+    },
+
+    primaryNeed: {
+      prompt: "What is your primary need today?",
+      options: [
+        { label: "Substance Use Treatment", next: "substanceAssessment" },
+        { label: "Mental Health Services", next: "mentalHealthAssessment" },
+        { label: "Food / Basic Needs", next: "basicNeeds" },
+        { label: "ECTLC Program Info", next: "ectlcInfo" }
+      ]
+    },
+
+    substanceAssessment: {
+      prompt: "Are you seeking detox, residential treatment, or outpatient?",
+      options: [
+        { label: "Detox", next: "detoxReferral" },
+        { label: "Residential", next: "residentialReferral" },
+        { label: "Outpatient", next: "outpatientReferral" }
+      ]
+    },
+
+    detoxReferral: {
+      prompt: "Confirm substance, last use, withdrawal risk, and insurance. Provide detox referrals from the database and next-step instructions.",
+      options: [{ label: "Finish", next: "end" }]
+    },
+
+    residentialReferral: {
+      prompt: "Confirm readiness, availability, and any restrictions. Provide residential program referrals from the database and intake steps.",
+      options: [{ label: "Finish", next: "end" }]
+    },
+
+    outpatientReferral: {
+      prompt: "Confirm location and scheduling constraints. Provide outpatient program referrals from the database, including walk-in or appointment requirements.",
+      options: [{ label: "Finish", next: "end" }]
+    },
+
+    mentalHealthAssessment: {
+      prompt: "Is this urgent today (risk of harm, hallucinations, unable to care for self)?",
+      options: [
+        { label: "Yes", next: "mhUrgent" },
+        { label: "No", next: "mhNonUrgent" }
+      ]
+    },
+
+    mhUrgent: {
+      prompt: "If imminent risk: 911. If crisis support: 988. Otherwise, provide urgent walk-in crisis resources from the database and confirm transportation.",
+      options: [{ label: "Finish", next: "end" }]
+    },
+
+    mhNonUrgent: {
+      prompt: "Provide outpatient mental health options, clinics, and referral pathways from the database. Confirm county region and insurance status.",
+      options: [{ label: "Finish", next: "end" }]
+    },
+
+    ectlcInfo: {
+      prompt: "ECTLC is one option. Do you want intake requirements and expectations, or alternative placements in the county?",
+      options: [
+        { label: "ECTLC Intake Info", next: "ectlcIntake" },
+        { label: "Other County Options", next: "countyOptions" }
+      ]
+    },
+
+    ectlcIntake: {
+      prompt: "Review ECTLC eligibility, intake steps, required documents, and what to expect. If not a fit, offer alternatives.",
+      options: [{ label: "Finish", next: "end" }]
+    },
+
+    countyOptions: {
+      prompt: "Provide 2 to 4 alternatives based on location, need, and eligibility. Use database to confirm hours and intake process.",
+      options: [{ label: "Finish", next: "end" }]
+    },
+
+    basicNeeds: {
+      prompt: "Provide food, hygiene, showers, laundry, clothing, benefits help, and day center options from the database. Confirm caller location.",
+      options: [{ label: "Finish", next: "end" }]
+    },
+
+    end: {
+      prompt: "Thank you for calling Anchor Point. Is there anything else I can help with today?",
+      options: [{ label: "Restart", next: "start" }]
+    }
+  };
+
+  let currentNode = "start";
+
+  function renderScriptNode() {
+    const promptEl = $("scriptPrompt");
+    const btnEl = $("scriptButtons");
+    if (!promptEl || !btnEl) return;
+
+    const node = SCRIPT_TREE[currentNode];
+    if (!node) {
+      currentNode = "start";
+      return renderScriptNode();
+    }
+
+    promptEl.textContent = node.prompt;
+    btnEl.innerHTML = "";
+
+    (node.options || []).forEach(opt => {
+      const b = document.createElement("button");
+      b.className = "btn primary";
+      b.type = "button";
+      b.textContent = opt.label;
+      b.addEventListener("click", () => {
+        currentNode = opt.next;
+        renderScriptNode();
+      });
+      btnEl.appendChild(b);
+    });
+  }
+
+  // expose to inline onclick in your HTML button
+  function resetScript() {
+    currentNode = "start";
+    renderScriptNode();
+  }
+  window.resetScript = resetScript;
+
+  /* =========================
+     RENDERING
+     ========================= */
+  let selectedIndex = 0;
+  let filtered = [...DATA];
+
+  function renderList() {
+    const list = $("list");
+    list.innerHTML = "";
+
+    $("countChip").textContent = `${filtered.length} program${filtered.length === 1 ? "" : "s"}`;
+
+    filtered.forEach((item, idx) => {
+      const card = document.createElement("div");
+      card.className = "card" + (idx === selectedIndex ? " active" : "");
+      card.tabIndex = 0;
+
+      const tagClass = urgencyClass(item.urgency);
+
+      card.innerHTML = `
+        <div class="row">
+          <div>
+            <div class="org">${item.organization}</div>
+            <div style="margin-top:4px;color:var(--muted);font-size:12.5px;">${item.serviceFunction}</div>
+          </div>
+          <div class="tag ${tagClass}">${item.urgency || "-"}</div>
+        </div>
+
+        <div class="subgrid">
+          <div><b>Phone:</b> <span class="mono">${item.phoneDisplay || "-"}</span></div>
+          <div><b>Location:</b> ${item.location || "-"}</div>
+          <div><b>Population:</b> ${item.population || "-"}</div>
+          <div><b>Hours:</b> ${item.hours || "-"}</div>
+        </div>
+
+        <div class="desc">${item.description || ""}</div>
+
+        <div class="actions">
+          ${buildActions(item).slice(0, 3).map(a => `
+            <a class="action" href="${a.href}" ${a.target ? `target="${a.target}" rel="noopener"` : ""}>${a.label}</a>
+          `).join("")}
+        </div>
+      `;
+
+      card.addEventListener("click", () => { selectedIndex = idx; renderAll(); });
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); selectedIndex = idx; renderAll(); }
+      });
+
+      list.appendChild(card);
+    });
+
+    if (selectedIndex >= filtered.length) selectedIndex = 0;
+  }
+
+  function renderDetails() {
+    const item = filtered[selectedIndex];
+    if (!item) {
+      $("selOrg").textContent = "No results";
+      $("selSvc").textContent = "-";
+      $("urgencyChip").textContent = "-";
+      $("actions").innerHTML = "";
+      $("kv").innerHTML = "";
+      return;
+    }
+
+    $("selOrg").textContent = item.organization;
+    $("selSvc").textContent = item.serviceFunction;
+
+    const uc = urgencyClass(item.urgency);
+    $("urgencyChip").textContent = item.urgency || "-";
+    $("urgencyChip").className = "chip";
+    if (uc === "immediate") $("urgencyChip").style.borderColor = "rgba(251,113,133,.35)";
+    else if (uc === "urgent") $("urgencyChip").style.borderColor = "rgba(251,191,36,.30)";
+    else $("urgencyChip").style.borderColor = "rgba(52,211,153,.25)";
+
+    $("kv").innerHTML = `
+      <div><span>Phone</span><b class="mono">${item.phoneDisplay || "-"}</b></div>
+      <div><span>Population</span><b>${item.population || "-"}</b></div>
+      <div><span>Location</span><b>${item.location || "-"}</b></div>
+      <div><span>Hours</span><b>${item.hours || "-"}</b></div>
+      <div><span>Website</span><b>${item.website ? `<a href="${item.website}" target="_blank" rel="noopener">${item.website}</a>` : "-"}</b></div>
+      <div><span>Email</span><b>${item.email ? `<a href="mailto:${item.email}">${item.email}</a>` : "-"}</b></div>
+      <div><span>Audit date</span><b>${item.auditDate || "-"}</b></div>
+    `;
+
+    // NOTE: Removed scriptText update because your new UI no longer has #scriptText
+
+    const acts = buildActions(item);
+    $("actions").innerHTML = "";
+    acts.forEach(a => {
+      const el = document.createElement("a");
+      el.className = "action";
+      el.textContent = a.label;
+      el.href = a.href;
+      if (a.target) { el.target = a.target; el.rel = "noopener"; }
+      if (a.copy) {
+        el.href = "#";
+        el.addEventListener("click", async (e) => {
+          e.preventDefault();
+          await copyText(formatForCopy(item));
+          el.textContent = "✅ Copied";
+          setTimeout(() => el.textContent = a.label, 1200);
+        });
+      }
+      $("actions").appendChild(el);
+    });
+  }
+
+  function renderAll() {
+    renderList();
+    renderDetails();
+  }
+
+  /* =========================
+     SEARCH / CONTROLS
+     ========================= */
+  function applySearch() {
+    const q = $("q").value.trim().toLowerCase();
+    if (!q) {
+      filtered = [...DATA];
+    } else {
+      filtered = DATA.filter(x => {
+        const hay = [
+          x.serviceFunction, x.organization, x.phoneDisplay, x.urgency,
+          x.population, x.description, x.location, x.hours, x.website,
+          x.email, x.notes, x.auditDate
+        ].join(" ").toLowerCase();
+        return hay.includes(q);
+      });
+    }
+    selectedIndex = 0;
+    renderAll();
+  }
+
+  $("q").addEventListener("input", applySearch);
+
+  $("clearBtn").addEventListener("click", () => {
+    $("q").value = "";
+    applySearch();
+    $("q").focus();
+  });
+
+  $("copyBtn").addEventListener("click", async () => {
+    const item = filtered[selectedIndex];
+    if (!item) return;
+    await copyText(formatForCopy(item));
+    const btn = $("copyBtn");
+    const old = btn.textContent;
+    btn.textContent = "✅ Copied";
+    setTimeout(() => btn.textContent = old, 1200);
+  });
+
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "/" && document.activeElement !== $("q")) {
+      e.preventDefault();
+      $("q").focus();
+    }
+    if (e.key === "Escape") {
+      $("q").value = "";
+      applySearch();
+    }
+    if (e.key === "ArrowDown") {
+      if (filtered.length) {
+        selectedIndex = Math.min(filtered.length - 1, selectedIndex + 1);
+        renderAll();
+      }
+    }
+    if (e.key === "ArrowUp") {
+      if (filtered.length) {
+        selectedIndex = Math.max(0, selectedIndex - 1);
+        renderAll();
+      }
+    }
+  });
+
+  /* =========================
+     INIT
+     ========================= */
+  renderAll();
+  renderScriptNode();
+</script>
+</body></html>
