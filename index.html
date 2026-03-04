@@ -27,7 +27,7 @@ header p {
 }
 .container {
   padding:40px;
-  max-width:1000px;
+  max-width:1100px;
   margin:auto;
 }
 .section {
@@ -35,7 +35,7 @@ header p {
 }
 .cards {
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:repeat(auto-fit, minmax(280px,1fr));
   gap:30px;
 }
 .card {
@@ -84,7 +84,9 @@ header p {
     <p>
       Anchor Point transforms a static resource directory into a structured
       coordination platform with operational visibility, data governance,
-      and executive intelligence.
+      and executive intelligence. The prototype demonstrates how a shared
+      resource database can support call center operations, reporting,
+      and leadership visibility.
     </p>
   </div>
 
@@ -93,17 +95,29 @@ header p {
     <div class="card">
       <h2>Call Center Application</h2>
       <p>
-        Guided interface for representatives. Decision-tree workflow.
-        Structured search. Controlled output. Prevents spreadsheet overload.
+        Guided interface for representatives. Decision-tree workflow,
+        structured search, and quick access to verified resources without
+        navigating complex spreadsheets.
       </p>
       <a class="button" href="app.html">Launch Call Center App</a>
     </div>
 
     <div class="card">
+      <h2>Printable Resource Report</h2>
+      <p>
+        Formatted report designed for walk-ins and outreach. Resources
+        can be filtered and printed so individuals leave with a clear
+        list of organizations and contact information.
+      </p>
+      <a class="button" href="report.html">View Sample Report</a>
+    </div>
+
+    <div class="card">
       <h2>Executive Dashboard</h2>
       <p>
-        Telephony metrics, service demand trends, resource aging compliance,
-        and governance visibility powered by application logging and Zoom integration.
+        Demonstrates how call activity, service demand trends, and
+        resource verification status could be monitored by leadership
+        through an operational dashboard.
       </p>
       <a class="button" href="dashboard.html">Launch Executive Dashboard</a>
     </div>
