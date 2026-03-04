@@ -1,0 +1,1804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Anchor Point – Executive Dashboard Prototype</title>
+
+<style>
+  :root{
+    --bg:#0b1220;
+    --panel:#101a2e;
+    --panel2:#0f172a;
+    --card:#0b1326;
+    --text:#e5e7eb;
+    --muted:#94a3b8;
+    --line:rgba(148,163,184,.18);
+    --teal:#2dd4bf;
+    --teal2:#14b8a6;
+    --amber:#fbbf24;
+    --red:#fb7185;
+    --green:#34d399;
+    --chip:#0b2034;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+    --radius:16px;
+    --radius2:12px;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    background:
+      radial-gradient(1200px 700px at 20% 10%, rgba(45,212,191,.14), transparent 55%),
+      radial-gradient(900px 600px at 80% 20%, rgba(59,130,246,.12), transparent 55%),
+      linear-gradient(180deg, var(--bg), #070b14);
+    color:var(--text);
+  }
+
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1320px; margin:0 auto; padding:18px 18px 40px;}
+  .topbar{
+    display:flex; gap:12px; align-items:center; justify-content:space-between;
+    padding:14px; border:1px solid var(--line); border-radius:var(--radius);
+    background:rgba(16,26,46,.75); backdrop-filter:blur(10px);
+    box-shadow:var(--shadow); position:sticky; top:12px; z-index:20;
+  }
+  .brand{display:flex; gap:12px; align-items:center;}
+  .logo{
+    width:40px; height:40px; border-radius:12px;
+    background:linear-gradient(135deg, var(--teal), rgba(59,130,246,.75));
+    box-shadow:0 10px 20px rgba(0,0,0,.25);
+  }
+  .brand h1{margin:0; font-size:14px; letter-spacing:.3px; text-transform:uppercase; color:#dbeafe;}
+  .brand .sub{font-size:12px; color:var(--muted); margin-top:2px;}
+
+  .controls{
+    display:grid; grid-template-columns: 220px 220px 1fr auto auto;
+    gap:10px; align-items:center; width:min(880px,100%);
+  }
+  .select, .search, .btn{
+    border:1px solid var(--line);
+    border-radius:14px;
+    background:rgba(15,23,42,.65);
+    color:var(--text);
+  }
+  .select{
+    padding:10px 12px; font-size:13px; outline:none;
+  }
+  .search{display:flex; gap:10px; align-items:center; padding:10px 12px;}
+  .search input{
+    width:100%; border:0; outline:none; background:transparent; color:var(--text); font-size:13px;
+  }
+  .search input::placeholder{color:rgba(148,163,184,.75);}
+  .btn{
+    padding:10px 12px; cursor:pointer; font-size:13px;
+    display:inline-flex; align-items:center; gap:8px; user-select:none; white-space:nowrap;
+    transition:transform .05s ease, border-color .15s ease, background .15s ease;
+  }
+  .btn:hover{border-color:rgba(45,212,191,.45); background:rgba(15,23,42,.85);}
+  .btn:active{transform:translateY(1px);}
+  .btn.primary{
+    background:linear-gradient(135deg, rgba(45,212,191,.22), rgba(59,130,246,.18));
+    border-color:rgba(45,212,191,.45);
+  }
+  .btn.ghost{background:rgba(15,23,42,.45);}
+
+  .grid{
+    display:grid; grid-template-columns: 1fr; gap:14px; margin-top:14px;
+  }
+
+  .section{
+    border:1px solid var(--line);
+    background:rgba(16,26,46,.55);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  .section-head{
+    padding:12px 14px;
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    background:rgba(11,19,38,.8); border-bottom:1px solid var(--line);
+  }
+  .title{
+    font-weight:800; font-size:12.5px; letter-spacing:.3px; text-transform:uppercase; color:#e0f2fe;
+  }
+  .meta{font-size:12px; color:var(--muted); display:flex; gap:10px; align-items:center;}
+  .chip{
+    background:rgba(45,212,191,.10);
+    color:#99f6e4;
+    border:1px solid rgba(45,212,191,.22);
+    padding:4px 8px;
+    border-radius:999px;
+    font-size:12px;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+  }
+  .chip.warn{
+    background:rgba(251,191,36,.10);
+    border-color:rgba(251,191,36,.22);
+    color:#fde68a;
+  }
+  .chip.danger{
+    background:rgba(251,113,133,.10);
+    border-color:rgba(251,113,133,.22);
+    color:#fecdd3;
+  }
+
+  .content{padding:12px;}
+  .kpi-grid{
+    display:grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap:10px;
+  }
+  .kpi{
+    border:1px solid var(--line);
+    background:rgba(11,19,38,.55);
+    border-radius:14px;
+    padding:12px;
+    cursor:pointer;
+    transition:border-color .15s ease, background .15s ease, transform .05s ease;
+    min-height:88px;
+  }
+  .kpi:hover{border-color:rgba(45,212,191,.40); background:rgba(11,19,38,.78);}
+  .kpi:active{transform:translateY(1px);}
+  .kpi .label{font-size:12px; color:var(--muted);}
+  .kpi .value{font-size:22px; font-weight:900; margin-top:6px;}
+  .kpi .delta{font-size:12px; color:var(--muted); margin-top:6px;}
+  .delta.up{color:#bbf7d0;}
+  .delta.down{color:#fecdd3;}
+
+  .two-col{
+    display:grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap:12px;
+    margin-top:12px;
+  }
+  .three-col{
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap:12px;
+    margin-top:12px;
+  }
+
+  .panel{
+    border:1px solid var(--line);
+    background:rgba(11,19,38,.55);
+    border-radius:14px;
+    padding:12px;
+  }
+  .panel h3{
+    margin:0 0 10px 0;
+    font-size:12.5px;
+    text-transform:uppercase;
+    letter-spacing:.3px;
+    color:#c7d2fe;
+    display:flex; justify-content:space-between; align-items:center;
+    gap:10px;
+  }
+  .small{font-size:12px; color:var(--muted); line-height:1.35;}
+  .divider{height:1px; background:var(--line); margin:10px 0;}
+
+  .chart{
+    width:100%;
+    height:160px;
+    border-radius:12px;
+    background:rgba(15,23,42,.55);
+    border:1px solid rgba(148,163,184,.12);
+    overflow:hidden;
+    position:relative;
+  }
+  .chart svg{width:100%; height:100%;}
+  .chart .hint{
+    position:absolute; bottom:8px; right:10px;
+    font-size:11px; color:rgba(148,163,184,.8);
+  }
+
+  .bars{display:grid; gap:8px;}
+  .bar-row{display:grid; grid-template-columns: 1fr 120px; gap:10px; align-items:center;}
+  .bar-label{font-size:12.5px; color:#d1d5db; display:flex; justify-content:space-between; gap:10px;}
+  .bar{
+    height:10px; border-radius:999px;
+    background:rgba(148,163,184,.12);
+    overflow:hidden;
+    border:1px solid rgba(148,163,184,.10);
+  }
+  .bar > span{
+    display:block; height:100%;
+    background:linear-gradient(90deg, rgba(45,212,191,.85), rgba(59,130,246,.70));
+    width:0%;
+  }
+  .bar > span.warn{
+    background:linear-gradient(90deg, rgba(251,191,36,.95), rgba(245,158,11,.70));
+  }
+  .bar > span.danger{
+    background:linear-gradient(90deg, rgba(251,113,133,.95), rgba(239,68,68,.70));
+  }
+
+  .heatmap{
+    display:grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap:6px;
+  }
+  .hm-cell{
+    height:20px;
+    border-radius:6px;
+    border:1px solid rgba(148,163,184,.14);
+    background:rgba(148,163,184,.08);
+    cursor:pointer;
+    transition:transform .05s ease, border-color .15s ease, background .15s ease;
+  }
+  .hm-cell:hover{border-color:rgba(45,212,191,.40); transform:translateY(-1px);}
+  .hm-legend{display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:8px;}
+  .legend-row{display:flex; gap:8px; align-items:center; font-size:12px; color:var(--muted);}
+  .swatch{width:14px; height:10px; border-radius:4px; border:1px solid rgba(148,163,184,.14); background:rgba(148,163,184,.08);}
+  .sw1{background:rgba(52,211,153,.22);}
+  .sw2{background:rgba(45,212,191,.30);}
+  .sw3{background:rgba(251,191,36,.28);}
+  .sw4{background:rgba(251,113,133,.28);}
+
+  table{width:100%; border-collapse:separate; border-spacing:0; overflow:hidden; border-radius:12px; border:1px solid rgba(148,163,184,.14);}
+  thead th{
+    text-align:left;
+    font-size:12px;
+    color:#cbd5e1;
+    background:rgba(15,23,42,.75);
+    border-bottom:1px solid rgba(148,163,184,.14);
+    padding:10px 10px;
+    position:sticky;
+    top:0;
+    z-index:1;
+  }
+  tbody td{
+    padding:10px 10px;
+    font-size:12.5px;
+    color:#e5e7eb;
+    border-bottom:1px solid rgba(148,163,184,.10);
+    background:rgba(11,19,38,.35);
+  }
+  tbody tr:hover td{background:rgba(11,19,38,.65);}
+  .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;}
+
+  .click{cursor:pointer;}
+  .pill{
+    display:inline-flex; align-items:center; gap:6px;
+    padding:3px 8px; border-radius:999px;
+    border:1px solid rgba(148,163,184,.18);
+    background:rgba(148,163,184,.08);
+    color:#d1d5db; font-size:12px;
+    white-space:nowrap;
+  }
+  .pill.good{border-color:rgba(52,211,153,.22); background:rgba(52,211,153,.10); color:#bbf7d0;}
+  .pill.warn{border-color:rgba(251,191,36,.22); background:rgba(251,191,36,.10); color:#fde68a;}
+  .pill.bad{border-color:rgba(251,113,133,.25); background:rgba(251,113,133,.10); color:#fecdd3;}
+
+  /* Drawer + modal */
+  .overlay{
+    position:fixed; inset:0; background:rgba(0,0,0,.55);
+    display:none; z-index:50;
+  }
+  .modal{
+    position:fixed; inset:0; display:none; z-index:60;
+    align-items:center; justify-content:center; padding:18px;
+  }
+  .modal .box{
+    width:min(920px, 100%); max-height:84vh; overflow:auto;
+    background:rgba(16,26,46,.95);
+    border:1px solid rgba(148,163,184,.22);
+    border-radius:18px;
+    box-shadow:0 30px 80px rgba(0,0,0,.55);
+  }
+  .modal .box-head{
+    display:flex; justify-content:space-between; align-items:center; gap:10px;
+    padding:12px 14px; border-bottom:1px solid rgba(148,163,184,.18);
+    background:rgba(11,19,38,.85);
+    position:sticky; top:0; z-index:1;
+  }
+  .modal .box-head .t{font-weight:900; letter-spacing:.2px;}
+  .modal .box-body{padding:12px 14px 16px;}
+
+  .drawer{
+    position:fixed; top:0; right:-520px; width:520px; height:100%;
+    background:rgba(16,26,46,.98);
+    border-left:1px solid rgba(148,163,184,.22);
+    box-shadow:-20px 0 60px rgba(0,0,0,.55);
+    z-index:70;
+    transition:right .18s ease;
+    display:flex; flex-direction:column;
+  }
+  .drawer.open{right:0;}
+  .drawer .head{
+    padding:12px 14px; background:rgba(11,19,38,.88);
+    border-bottom:1px solid rgba(148,163,184,.18);
+    display:flex; justify-content:space-between; align-items:center; gap:10px;
+  }
+  .drawer .head .t{font-weight:900;}
+  .drawer .body{padding:12px 14px; overflow:auto;}
+  .x{cursor:pointer; user-select:none; font-size:14px; color:var(--muted);}
+  .x:hover{color:var(--text);}
+
+  @media (max-width: 1120px){
+    .controls{grid-template-columns:1fr 1fr; width:100%;}
+    .kpi-grid{grid-template-columns:repeat(3, 1fr);}
+    .two-col{grid-template-columns:1fr;}
+    .three-col{grid-template-columns:1fr;}
+    .drawer{width:100%;}
+  }
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1>Anchor Point – Executive Dashboard</h1>
+        <div class="sub">Regional Coordination Intelligence • Prototype (Mock Data)</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <select id="range" class="select">
+        <option value="today">Today</option>
+        <option value="7d" selected>Last 7 days</option>
+        <option value="30d">Last 30 days</option>
+      </select>
+
+      <select id="region" class="select">
+        <option value="all" selected>All regions</option>
+        <option value="east">East County</option>
+        <option value="south">South County</option>
+        <option value="north">North County</option>
+        <option value="central">Central</option>
+      </select>
+
+      <div class="search">
+        <span style="color:var(--muted);font-size:14px;">🔎</span>
+        <input id="q" type="text" placeholder="Search programs, reps, categories…" autocomplete="off">
+      </div>
+
+      <button class="btn" id="toggleLive" type="button">⏱ Live: Off</button>
+      <button class="btn primary" id="exportBtn" type="button">📄 Export snapshot</button>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <!-- TELEPHONY OPS -->
+    <section class="section" aria-label="Telephony Operations">
+      <div class="section-head">
+        <div class="title">Telephony Operations</div>
+        <div class="meta">
+          <span class="chip">Zoom Phone (Assumed)</span>
+          <span id="ts" style="color:var(--muted);font-size:12px;"></span>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="kpi-grid" id="kpisTelephony"></div>
+
+        <div class="two-col">
+          <div class="panel">
+            <h3>
+              Call Volume Trend (7 days)
+              <span class="chip" id="chipVolume">Click points for details</span>
+            </h3>
+            <div class="chart" id="chartVolume">
+              <div class="hint">Calls</div>
+            </div>
+            <div class="small" id="volNote"></div>
+          </div>
+
+          <div class="panel">
+            <h3>
+              Peak Hour Heatmap
+              <span class="chip warn">Wait time + abandonment</span>
+            </h3>
+            <div class="small">Click a cell to drill into hour, wait time, and missed calls.</div>
+            <div class="divider"></div>
+            <div class="heatmap" id="heatmap"></div>
+            <div class="hm-legend">
+              <div class="legend-row"><span class="swatch sw1"></span> Low</div>
+              <div class="legend-row"><span class="swatch sw2"></span> Moderate</div>
+              <div class="legend-row"><span class="swatch sw3"></span> High</div>
+              <div class="legend-row"><span class="swatch sw4"></span> Critical</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="three-col">
+          <div class="panel">
+            <h3>Queue Health</h3>
+            <div class="bars" id="queueBars"></div>
+            <div class="small" style="margin-top:10px;">Assumed metrics: avg speed to answer, abandon rate, voicemail rate, callback time.</div>
+          </div>
+
+          <div class="panel">
+            <h3>Missed and Voicemail</h3>
+            <div class="chart" id="chartMissed"><div class="hint">Count</div></div>
+            <div class="small">Click the chart to open the missed call breakdown.</div>
+          </div>
+
+          <div class="panel">
+            <h3>Agent Activity</h3>
+            <div style="max-height:210px; overflow:auto;">
+              <table>
+                <thead><tr>
+                  <th class="click" data-sort="rep">Rep</th>
+                  <th class="click" data-sort="calls">Calls</th>
+                  <th class="click" data-sort="asa">Avg Wait</th>
+                  <th class="click" data-sort="cb">Avg Callback</th>
+                  <th class="click" data-sort="vm">VM</th>
+                </tr></thead>
+                <tbody id="tblAgents"></tbody>
+              </table>
+            </div>
+            <div class="small" style="margin-top:10px;">Click a rep row to drill into session activity and outcomes.</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- DEMAND INTELLIGENCE -->
+    <section class="section" aria-label="Demand Intelligence">
+      <div class="section-head">
+        <div class="title">Service Demand Intelligence</div>
+        <div class="meta">
+          <span class="chip">App Logging (Assumed)</span>
+          <span class="chip">Decision Tree + Search</span>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="kpi-grid" id="kpisDemand"></div>
+
+        <div class="two-col">
+          <div class="panel">
+            <h3>
+              Top Requested Categories
+              <span class="chip">Click bars to drill down</span>
+            </h3>
+            <div class="bars" id="categoryBars"></div>
+            <div class="small" style="margin-top:10px;">This is generated from call completion tagging, not from the spreadsheet itself.</div>
+          </div>
+
+          <div class="panel">
+            <h3>
+              Regional Demand Split
+              <span class="chip">Calls by region</span>
+            </h3>
+            <div class="chart" id="chartRegions"><div class="hint">Percent</div></div>
+            <div class="small">Click the chart to open region-level demand, top categories, and top programs.</div>
+          </div>
+        </div>
+
+        <div class="three-col">
+          <div class="panel">
+            <h3>Population Types</h3>
+            <div class="chart" id="chartPop"><div class="hint">Share</div></div>
+            <div class="small">Assumed capture from call flow prompts, optional fields.</div>
+          </div>
+
+          <div class="panel">
+            <h3>Referral Outcomes</h3>
+            <div class="bars" id="outcomeBars"></div>
+            <div class="small" style="margin-top:10px;">This becomes grant-ready reporting: assisted, referred, warm handoff, follow-up scheduled.</div>
+          </div>
+
+          <div class="panel">
+            <h3>Top Programs Referred</h3>
+            <div style="max-height:210px; overflow:auto;">
+              <table>
+                <thead><tr>
+                  <th>Program</th><th>Category</th><th>Referrals</th><th>Region</th>
+                </tr></thead>
+                <tbody id="tblPrograms"></tbody>
+              </table>
+            </div>
+            <div class="small" style="margin-top:10px;">Click a row to open the program profile and audit status.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GOVERNANCE -->
+    <section class="section" aria-label="Data Governance">
+      <div class="section-head">
+        <div class="title">Data Governance and Resource Integrity</div>
+        <div class="meta">
+          <span class="chip warn">Goal: ≤ 90 days</span>
+          <span class="chip" id="freshChip"></span>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="kpi-grid" id="kpisGov"></div>
+
+        <div class="two-col">
+          <div class="panel">
+            <h3>
+              Freshness Gauge
+              <span class="chip">Audit date aging</span>
+            </h3>
+            <div class="chart" id="gauge"><div class="hint">≤ 90 days</div></div>
+            <div class="small" id="gaugeNote"></div>
+            <div class="divider"></div>
+            <button class="btn primary" id="btnOverdue">📌 View overdue list</button>
+            <button class="btn" id="btnGenList">🗓 Generate verification list</button>
+          </div>
+
+          <div class="panel">
+            <h3>
+              Aging Distribution
+              <span class="chip">Bucketed</span>
+            </h3>
+            <div class="bars" id="agingBars"></div>
+            <div class="small" style="margin-top:10px;">Aging should drive staff worklists (weekly), and can be auto-emailed.</div>
+          </div>
+        </div>
+
+        <div class="three-col">
+          <div class="panel">
+            <h3>Data Completeness Flags</h3>
+            <div class="bars" id="completenessBars"></div>
+            <div class="small" style="margin-top:10px;">Missing fields reduce call success rate and increase callback burden.</div>
+          </div>
+
+          <div class="panel">
+            <h3>Stale High-Urgency Items</h3>
+            <div style="max-height:210px; overflow:auto;">
+              <table>
+                <thead><tr><th>Program</th><th>Urgency</th><th>Days old</th><th>Owner</th></tr></thead>
+                <tbody id="tblStaleUrgent"></tbody>
+              </table>
+            </div>
+            <div class="small" style="margin-top:10px;">Click a row to open a verification task card.</div>
+          </div>
+
+          <div class="panel">
+            <h3>Verification Throughput</h3>
+            <div class="chart" id="chartVerify"><div class="hint">Count</div></div>
+            <div class="small">Assumed internal workflow: items verified per week, by staff.</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- overlays -->
+<div class="overlay" id="overlay"></div>
+
+<!-- modal -->
+<div class="modal" id="modal">
+  <div class="box">
+    <div class="box-head">
+      <div class="t" id="modalTitle">Details</div>
+      <div class="x" id="modalClose">✖ Close</div>
+    </div>
+    <div class="box-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- drawer -->
+<div class="drawer" id="drawer">
+  <div class="head">
+    <div class="t" id="drawerTitle">Drilldown</div>
+    <div class="x" id="drawerClose">✖ Close</div>
+  </div>
+  <div class="body" id="drawerBody"></div>
+</div>
+
+<script>
+  // -----------------------------
+  // Mock data model (assumed Zoom + app logging + governance)
+  // -----------------------------
+  const MOCK = {
+    telephony: {
+      today: {calls: 142, answeredRate: 0.91, asaSec: 42, abandonRate: 0.07, vm: 18, avgCallbackMin: 23, missed: 13},
+      last7d: [
+        {d:"Mon", calls:118, asa:44, missed:10, vm:14, abandon:0.06},
+        {d:"Tue", calls:131, asa:40, missed:12, vm:16, abandon:0.07},
+        {d:"Wed", calls:147, asa:46, missed:15, vm:19, abandon:0.08},
+        {d:"Thu", calls:139, asa:41, missed:11, vm:17, abandon:0.06},
+        {d:"Fri", calls:152, asa:48, missed:18, vm:21, abandon:0.09},
+        {d:"Sat", calls:96,  asa:35, missed:6,  vm:9,  abandon:0.05},
+        {d:"Sun", calls:84,  asa:32, missed:5,  vm:7,  abandon:0.04},
+      ],
+      heatmap: {
+        // 12 blocks represent 8am to 7pm in 1 hour blocks
+        hours: ["8a","9a","10a","11a","12p","1p","2p","3p","4p","5p","6p","7p"],
+        // intensity: 0-3 (low to critical) per hour
+        intensity: [0,1,2,2,3,3,2,2,1,1,0,0],
+        // additional hour metrics
+        detail: [
+          {asa:28, abandon:0.03, calls:7, missed:0, vm:1},
+          {asa:36, abandon:0.05, calls:11, missed:1, vm:1},
+          {asa:49, abandon:0.08, calls:16, missed:2, vm:2},
+          {asa:55, abandon:0.09, calls:18, missed:2, vm:2},
+          {asa:72, abandon:0.13, calls:22, missed:3, vm:4},
+          {asa:78, abandon:0.14, calls:24, missed:3, vm:4},
+          {asa:61, abandon:0.10, calls:19, missed:2, vm:3},
+          {asa:58, abandon:0.09, calls:18, missed:2, vm:3},
+          {asa:45, abandon:0.07, calls:14, missed:1, vm:2},
+          {asa:41, abandon:0.06, calls:13, missed:1, vm:2},
+          {asa:33, abandon:0.04, calls:9,  missed:1, vm:1},
+          {asa:26, abandon:0.03, calls:6,  missed:0, vm:1}
+        ]
+      },
+      agents: [
+        {rep:"Sarah", calls:38, asaSec:39, avgCallbackMin:18, vm:4, outcomes:{assisted:18, referred:14, warm:4, follow:2}},
+        {rep:"John",  calls:29, asaSec:44, avgCallbackMin:26, vm:5, outcomes:{assisted:12, referred:12, warm:2, follow:3}},
+        {rep:"Maria", calls:42, asaSec:41, avgCallbackMin:22, vm:6, outcomes:{assisted:20, referred:17, warm:3, follow:2}},
+        {rep:"Kevin", calls:33, asaSec:47, avgCallbackMin:27, vm:3, outcomes:{assisted:14, referred:12, warm:4, follow:3}},
+      ]
+    },
+
+    demand: {
+      totals: {callsTagged: 127, escalations: 9, referralConversion: 0.74, warmHandoffRate: 0.18, followUpScheduled: 22, avgResolutionMin: 6.8},
+      categories: [
+        {name:"Substance Use", pct:0.38, count:48, sub:[{n:"Detox",c:22},{n:"Residential",c:16},{n:"Outpatient",c:10}]},
+        {name:"Shelter", pct:0.24, count:30, sub:[{n:"Emergency Shelter",c:18},{n:"Safe Parking",c:7},{n:"Transitional",c:5}]},
+        {name:"Mental Health", pct:0.19, count:24, sub:[{n:"Crisis",c:9},{n:"Outpatient",c:10},{n:"Psychiatry",c:5}]},
+        {name:"Medical Respite", pct:0.12, count:15, sub:[{n:"Post-discharge",c:11},{n:"Care coord",c:4}]},
+        {name:"Benefits", pct:0.07, count:10, sub:[{n:"CalFresh",c:4},{n:"Medi-Cal",c:3},{n:"General Relief",c:3}]}
+      ],
+      regions: [
+        {name:"East County", pct:0.47, top:["Shelter","Substance Use","Benefits"]},
+        {name:"Central", pct:0.21, top:["Mental Health","Shelter","Substance Use"]},
+        {name:"South County", pct:0.18, top:["Benefits","Shelter","Mental Health"]},
+        {name:"North County", pct:0.14, top:["Medical Respite","Shelter","Substance Use"]},
+      ],
+      populations: [
+        {name:"Adults", pct:0.58},
+        {name:"Families", pct:0.17},
+        {name:"Youth", pct:0.09},
+        {name:"Seniors", pct:0.08},
+        {name:"Veterans", pct:0.08},
+      ],
+      outcomes: [
+        {name:"Assisted", pct:0.41, count:52},
+        {name:"Referred", pct:0.33, count:42},
+        {name:"Warm handoff", pct:0.18, count:23},
+        {name:"Follow-up scheduled", pct:0.08, count:10},
+      ],
+      programs: [
+        {program:"HHSA Medical Respite Coordination", category:"Medical Respite", referrals:18, region:"Countywide", auditDays:22, urgency:"Urgent", owner:"Sarah"},
+        {program:"Father Joe’s Medical Respite", category:"Medical Respite", referrals:14, region:"Central", auditDays:61, urgency:"Urgent", owner:"Sarah"},
+        {program:"Alpha Project Recuperative Care", category:"Medical Respite", referrals:11, region:"Central", auditDays:131, urgency:"Urgent", owner:"Sarah"},
+        {program:"Access to Recovery (HSA)", category:"Substance Use", referrals:16, region:"Central", auditDays:44, urgency:"Urgent", owner:"Skyler"},
+        {program:"Network of Care – SD", category:"Mental Health", referrals:12, region:"Countywide", auditDays:98, urgency:"Ongoing", owner:"Sarah"},
+        {program:"OSCAR Health Navigation", category:"Benefits", referrals:10, region:"Countywide", auditDays:77, urgency:"Ongoing", owner:"Sarah"},
+        {program:"Horizon Community Services", category:"Medical Respite", referrals:9, region:"Central", auditDays:147, urgency:"Urgent", owner:"Sarah"},
+        {program:"Travelers Aid San Diego", category:"Basic Needs", referrals:8, region:"Central", auditDays:112, urgency:"Ongoing", owner:"Sarah"},
+      ]
+    },
+
+    governance: {
+      freshness: {lte90: 0.82, d91_120: 0.12, gt120: 0.06, avgAge: 54, goal: 90},
+      completeness: [
+        {name:"Missing website", pct:0.09, count:41},
+        {name:"Missing email", pct:0.24, count:108},
+        {name:"Missing hours", pct:0.11, count:49},
+        {name:"Missing audit date", pct:0.03, count:12}
+      ],
+      agingBuckets: [
+        {name:"0-30 days", pct:0.41, count:185},
+        {name:"31-60 days", pct:0.23, count:104},
+        {name:"61-90 days", pct:0.18, count:81},
+        {name:"91-120 days", pct:0.12, count:54},
+        {name:">120 days", pct:0.06, count:27},
+      ],
+      staleUrgent: [
+        {program:"Horizon Community Services", urgency:"Urgent", days:147, owner:"Sarah"},
+        {program:"Alpha Project Recuperative Care", urgency:"Urgent", days:131, owner:"Sarah"},
+        {program:"Network of Care – SD", urgency:"Ongoing", days:98, owner:"Sarah"},
+        {program:"Travelers Aid San Diego", urgency:"Ongoing", days:112, owner:"Sarah"},
+      ],
+      verifyThroughput: [
+        {w:"Wk-1", v:18},
+        {w:"Wk-2", v:21},
+        {w:"Wk-3", v:16},
+        {w:"Wk-4", v:24},
+        {w:"Wk-5", v:22},
+        {w:"Wk-6", v:27},
+        {w:"Wk-7", v:25},
+      ]
+    }
+  };
+
+  // -----------------------------
+  // Utilities
+  // -----------------------------
+  const $ = (id) => document.getElementById(id);
+
+  function fmtPct(x){ return Math.round(x*100) + "%"; }
+  function fmtTimeSec(s){
+    const m = Math.floor(s/60);
+    const r = s%60;
+    return (m>0 ? (String(m).padStart(2,"0")+":") : "00:") + String(r).padStart(2,"0");
+  }
+  function fmtMin(m){ return `${Math.round(m)} min`; }
+  function clamp(n,a,b){ return Math.max(a, Math.min(b,n)); }
+
+  function setTimestamp(){
+    const d = new Date();
+    $("ts").textContent = "Updated: " + d.toLocaleString();
+  }
+
+  function sparkDelta(label, direction){
+    if(direction === "up") return `<span class="delta up">▲ ${label}</span>`;
+    if(direction === "down") return `<span class="delta down">▼ ${label}</span>`;
+    return `<span class="delta">${label}</span>`;
+  }
+
+  // -----------------------------
+  // KPI builders
+  // -----------------------------
+  function renderTelephonyKPIs(){
+    const t = MOCK.telephony.today;
+    const kpis = [
+      {id:"k_calls", label:"Total calls (today)", value:t.calls, delta:sparkDelta("vs yesterday +6%", "up"), drill: () => openModalCalls()},
+      {id:"k_ans", label:"Answered rate", value:fmtPct(t.answeredRate), delta:sparkDelta("target ≥ 90%", "up"), drill: () => openModalQueue("Answered Rate")},
+      {id:"k_asa", label:"Avg speed to answer", value:fmtTimeSec(t.asaSec), delta:sparkDelta("peak hour risk", "down"), drill: () => openModalQueue("Wait Time")},
+      {id:"k_abn", label:"Abandon rate", value:fmtPct(t.abandonRate), delta:sparkDelta("watch ≥ 8%", "down"), drill: () => openModalQueue("Abandon Rate")},
+      {id:"k_vm", label:"Calls to voicemail", value:t.vm, delta:sparkDelta("callbacks pending", "down"), drill: () => openModalMissed()},
+      {id:"k_cb", label:"Avg callback time", value:fmtMin(t.avgCallbackMin), delta:sparkDelta("goal ≤ 20 min", "down"), drill: () => openModalCallbacks()},
+    ];
+
+    const host = $("kpisTelephony");
+    host.innerHTML = "";
+    for(const k of kpis){
+      const div = document.createElement("div");
+      div.className = "kpi";
+      div.innerHTML = `<div class="label">${k.label}</div><div class="value">${k.value}</div><div class="delta">${k.delta}</div>`;
+      div.addEventListener("click", k.drill);
+      host.appendChild(div);
+    }
+
+    $("volNote").textContent = "Volume and wait time are assumed from Zoom call logs and queue metrics. Click any KPI to drill in.";
+  }
+
+  function renderDemandKPIs(){
+    const d = MOCK.demand.totals;
+    const kpis = [
+      {label:"Calls tagged (app)", value:d.callsTagged, delta:sparkDelta("coverage 89%", "up"), drill: () => openModalDemand("Call Tagging Coverage")},
+      {label:"Escalations", value:d.escalations, delta:sparkDelta("triage events", "down"), drill: () => openModalDemand("Escalations")},
+      {label:"Referral conversion", value:fmtPct(d.referralConversion), delta:sparkDelta("target ≥ 70%", "up"), drill: () => openModalDemand("Referral Conversion")},
+      {label:"Warm handoff rate", value:fmtPct(d.warmHandoffRate), delta:sparkDelta("goal: increase", "up"), drill: () => openModalDemand("Warm Handoffs")},
+      {label:"Follow-ups scheduled", value:d.followUpScheduled, delta:sparkDelta("case continuity", "up"), drill: () => openModalDemand("Follow-up Scheduling")},
+      {label:"Avg time to resolution", value:`${d.avgResolutionMin.toFixed(1)} min`, delta:sparkDelta("includes callbacks", "down"), drill: () => openModalDemand("Resolution Time")},
+    ];
+    const host = $("kpisDemand");
+    host.innerHTML = "";
+    for(const k of kpis){
+      const div = document.createElement("div");
+      div.className = "kpi";
+      div.innerHTML = `<div class="label">${k.label}</div><div class="value">${k.value}</div><div class="delta">${k.delta}</div>`;
+      div.addEventListener("click", k.drill);
+      host.appendChild(div);
+    }
+  }
+
+  function renderGovKPIs(){
+    const g = MOCK.governance.freshness;
+    const kpis = [
+      {label:"Verified ≤ 90 days", value:fmtPct(g.lte90), delta:sparkDelta("goal ≥ 90%", "down"), drill: () => openDrawerOverdue()},
+      {label:"Avg age", value:`${g.avgAge} days`, delta:sparkDelta("target ≤ 60", "down"), drill: () => openModalGovernance("Age Distribution")},
+      {label:"Over 120 days", value:fmtPct(g.gt120), delta:sparkDelta("must reduce", "down"), drill: () => openDrawerOverdue()},
+      {label:"Missing email", value:MOCK.governance.completeness.find(x=>x.name==="Missing email").count, delta:sparkDelta("impacts follow-up", "down"), drill: () => openModalGovernance("Completeness")},
+      {label:"Missing website", value:MOCK.governance.completeness.find(x=>x.name==="Missing website").count, delta:sparkDelta("impacts self-serve", "down"), drill: () => openModalGovernance("Completeness")},
+      {label:"Missing audit date", value:MOCK.governance.completeness.find(x=>x.name==="Missing audit date").count, delta:sparkDelta("governance risk", "down"), drill: () => openDrawerOverdue()},
+    ];
+    const host = $("kpisGov");
+    host.innerHTML = "";
+    for(const k of kpis){
+      const div = document.createElement("div");
+      div.className = "kpi";
+      div.innerHTML = `<div class="label">${k.label}</div><div class="value">${k.value}</div><div class="delta">${k.delta}</div>`;
+      div.addEventListener("click", k.drill);
+      host.appendChild(div);
+    }
+    $("freshChip").textContent = `Current: ${fmtPct(g.lte90)} | Overdue: ${fmtPct(1-g.lte90)}`;
+  }
+
+  // -----------------------------
+  // Charts (SVG)
+  // -----------------------------
+  function makeLineChart(hostId, series, yKey, labelKey, onPointClick){
+    const host = $(hostId);
+    const w = host.clientWidth || 600;
+    const h = host.clientHeight || 160;
+    const padL = 36, padR = 10, padT = 12, padB = 26;
+    const xs = series.map((_,i)=> i);
+    const ys = series.map(d => d[yKey]);
+    const ymin = Math.min(...ys);
+    const ymax = Math.max(...ys);
+    const span = (ymax - ymin) || 1;
+
+    const x = (i)=> padL + (i/(series.length-1))*(w - padL - padR);
+    const y = (v)=> padT + (1-((v-ymin)/span))*(h - padT - padB);
+
+    let dPath = "";
+    series.forEach((pt,i)=>{
+      dPath += (i===0? "M":"L") + x(i).toFixed(1) + " " + y(pt[yKey]).toFixed(1) + " ";
+    });
+
+    const gridLines = 4;
+    let grid = "";
+    for(let i=0;i<=gridLines;i++){
+      const yy = padT + (i/gridLines)*(h - padT - padB);
+      grid += `<line x1="${padL}" y1="${yy}" x2="${w-padR}" y2="${yy}" stroke="rgba(148,163,184,.10)" />`;
+    }
+
+    let xlabels = "";
+    series.forEach((pt,i)=>{
+      const xx = x(i);
+      xlabels += `<text x="${xx}" y="${h-10}" fill="rgba(148,163,184,.85)" font-size="11" text-anchor="middle">${pt[labelKey]}</text>`;
+    });
+
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+    svg.innerHTML = `
+      ${grid}
+      <path d="${dPath}" fill="none" stroke="rgba(45,212,191,.95)" stroke-width="2.3"/>
+      <path d="${dPath}" fill="none" stroke="rgba(59,130,246,.55)" stroke-width="6" opacity="0.35"/>
+      ${xlabels}
+      <text x="10" y="16" fill="rgba(148,163,184,.85)" font-size="11">${yKey}</text>
+    `;
+    host.innerHTML = "";
+    host.appendChild(svg);
+
+    // points
+    series.forEach((pt,i)=>{
+      const cx = x(i), cy = y(pt[yKey]);
+      const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      c.setAttribute("cx", cx); c.setAttribute("cy", cy);
+      c.setAttribute("r", 4.2);
+      c.setAttribute("fill", "rgba(45,212,191,.95)");
+      c.style.cursor = "pointer";
+      c.addEventListener("click", () => onPointClick && onPointClick(pt));
+      svg.appendChild(c);
+    });
+  }
+
+  function makeMiniBars(hostId, items, getPct, clsForItem, onClick){
+    const host = $(hostId);
+    host.innerHTML = "";
+    for(const it of items){
+      const row = document.createElement("div");
+      row.className = "bar-row";
+      row.innerHTML = `
+        <div class="bar-label">
+          <span>${it.name}</span>
+          <span class="mono">${(it.valueLabel || "")}</span>
+        </div>
+        <div class="bar"><span class="${clsForItem ? clsForItem(it) : ""}" style="width:${Math.round(getPct(it)*100)}%"></span></div>
+      `;
+      row.addEventListener("click", ()=> onClick && onClick(it));
+      host.appendChild(row);
+    }
+  }
+
+  function makeGauge(hostId, pctCurrent){
+    const host = $(hostId);
+    const w = host.clientWidth || 600;
+    const h = host.clientHeight || 160;
+    const cx = w/2, cy = h*0.95;
+    const r = Math.min(w*0.42, h*0.9);
+    const start = Math.PI;        // 180
+    const end = 0;               // 0
+    const span = start - end;
+    const pct = clamp(pctCurrent, 0, 1);
+    const angle = start - pct*span;
+
+    function polar(a){
+      return {x: cx + r*Math.cos(a), y: cy - r*Math.sin(a)};
+    }
+    const p0 = polar(start);
+    const p1 = polar(end);
+    const pc = polar(angle);
+
+    const largeArc = 0;
+    const bgPath = `M ${p0.x} ${p0.y} A ${r} ${r} 0 ${largeArc} 1 ${p1.x} ${p1.y}`;
+    const fgPath = `M ${p0.x} ${p0.y} A ${r} ${r} 0 ${largeArc} 1 ${pc.x} ${pc.y}`;
+
+    host.innerHTML = `
+      <svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+        <path d="${bgPath}" stroke="rgba(148,163,184,.14)" stroke-width="14" fill="none" stroke-linecap="round"/>
+        <path d="${fgPath}" stroke="rgba(45,212,191,.95)" stroke-width="14" fill="none" stroke-linecap="round"/>
+        <circle cx="${pc.x}" cy="${pc.y}" r="6" fill="rgba(45,212,191,.95)"/>
+        <text x="${cx}" y="${h*0.62}" text-anchor="middle" fill="#e5e7eb" font-size="26" font-weight="900">${Math.round(pct*100)}%</text>
+        <text x="${cx}" y="${h*0.78}" text-anchor="middle" fill="rgba(148,163,184,.85)" font-size="12">Verified within 90 days</text>
+      </svg>
+    `;
+  }
+
+  function makeDonut(hostId, items){
+    const host = $(hostId);
+    const w = host.clientWidth || 600;
+    const h = host.clientHeight || 160;
+    const cx = w/2, cy = h/2, r = Math.min(w,h)*0.33;
+    let a = -Math.PI/2;
+    const total = items.reduce((s,x)=>s+x.pct,0) || 1;
+
+    function arcPath(start, end){
+      const x0 = cx + r*Math.cos(start), y0 = cy + r*Math.sin(start);
+      const x1 = cx + r*Math.cos(end), y1 = cy + r*Math.sin(end);
+      const large = (end-start) > Math.PI ? 1 : 0;
+      return `M ${x0} ${y0} A ${r} ${r} 0 ${large} 1 ${x1} ${y1}`;
+    }
+
+    const colors = [
+      "rgba(45,212,191,.95)",
+      "rgba(59,130,246,.75)",
+      "rgba(251,191,36,.85)",
+      "rgba(52,211,153,.70)",
+      "rgba(251,113,133,.75)"
+    ];
+
+    let paths = "";
+    items.forEach((it,i)=>{
+      const seg = (it.pct/total)*Math.PI*2;
+      const a2 = a + seg;
+      paths += `<path d="${arcPath(a,a2)}" stroke="${colors[i%colors.length]}" stroke-width="14" fill="none" stroke-linecap="round" />`;
+      a = a2;
+    });
+
+    const legend = items.map((it,i)=>{
+      return `<div class="legend-row"><span class="swatch" style="background:${colors[i%colors.length]}; border-color:rgba(255,255,255,.06)"></span>${it.name} <span class="mono" style="margin-left:auto">${Math.round(it.pct*100)}%</span></div>`;
+    }).join("");
+
+    host.innerHTML = `
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; align-items:center;">
+        <svg viewBox="0 0 ${w} ${h}" style="height:160px;">
+          <circle cx="${cx}" cy="${cy}" r="${r}" stroke="rgba(148,163,184,.10)" stroke-width="14" fill="none"/>
+          ${paths}
+          <text x="${cx}" y="${cy+6}" text-anchor="middle" fill="#e5e7eb" font-size="14" font-weight="900">Population</text>
+        </svg>
+        <div style="display:grid; gap:6px;">${legend}</div>
+      </div>
+    `;
+  }
+
+  // -----------------------------
+  // Renderers: panels, tables
+  // -----------------------------
+  function renderHeatmap(){
+    const hm = $("heatmap");
+    hm.innerHTML = "";
+    const {hours, intensity, detail} = MOCK.telephony.heatmap;
+
+    function colorFor(i){
+      if(i===0) return "rgba(52,211,153,.18)";
+      if(i===1) return "rgba(45,212,191,.22)";
+      if(i===2) return "rgba(251,191,36,.22)";
+      return "rgba(251,113,133,.22)";
+    }
+
+    hours.forEach((h,i)=>{
+      const cell = document.createElement("div");
+      cell.className = "hm-cell";
+      cell.style.background = colorFor(intensity[i]);
+      cell.title = `${h} | ASA ${detail[i].asa}s | Abandon ${Math.round(detail[i].abandon*100)}%`;
+      cell.addEventListener("click", ()=>{
+        openModal("Hour Detail: " + h, `
+          <div class="small">Assumed Zoom queue snapshot for this hour block.</div>
+          <div class="divider"></div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+            <div class="panel">
+              <h3>Volume</h3>
+              <div class="small">Calls</div>
+              <div style="font-size:22px;font-weight:900;margin-top:6px;">${detail[i].calls}</div>
+              <div class="small" style="margin-top:10px;">Missed: <b>${detail[i].missed}</b> | Voicemail: <b>${detail[i].vm}</b></div>
+            </div>
+            <div class="panel">
+              <h3>Queue</h3>
+              <div class="small">Avg speed to answer</div>
+              <div style="font-size:22px;font-weight:900;margin-top:6px;">${fmtTimeSec(detail[i].asa)}</div>
+              <div class="small" style="margin-top:10px;">Abandon rate: <b>${Math.round(detail[i].abandon*100)}%</b></div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div class="small">Possible action: adjust staffing during this hour block, or trigger callback workflow.</div>
+        `);
+      });
+      hm.appendChild(cell);
+    });
+  }
+
+  function renderQueueBars(){
+    const t = MOCK.telephony.today;
+    const items = [
+      {name:"Answered rate", v: t.answeredRate, valueLabel: fmtPct(t.answeredRate)},
+      {name:"Abandon rate", v: t.abandonRate, valueLabel: fmtPct(t.abandonRate)},
+      {name:"Voicemail rate", v: t.vm / t.calls, valueLabel: fmtPct(t.vm / t.calls)},
+      {name:"Avg callback (target 20)", v: clamp(t.avgCallbackMin/40,0,1), valueLabel: fmtMin(t.avgCallbackMin)},
+    ];
+
+    makeMiniBars(
+      "queueBars",
+      items.map(x=>({name:x.name, valueLabel:x.valueLabel, v:x.v})),
+      (it)=> (it.name.includes("Abandon") ? it.v : it.v),
+      (it)=>{
+        if(it.name.includes("Abandon")){
+          if(it.v >= 0.10) return "danger";
+          if(it.v >= 0.08) return "warn";
+          return "";
+        }
+        if(it.name.includes("Voicemail")){
+          if(it.v >= 0.18) return "warn";
+          return "";
+        }
+        if(it.name.includes("callback")){
+          if(it.v >= 0.65) return "warn";
+          return "";
+        }
+        return "";
+      },
+      (it)=> openModalQueue(it.name)
+    );
+  }
+
+  function renderAgentsTable(){
+    const body = $("tblAgents");
+    body.innerHTML = "";
+    const rows = MOCK.telephony.agents.slice().sort((a,b)=> b.calls - a.calls);
+    for(const r of rows){
+      const tr = document.createElement("tr");
+      tr.className = "click";
+      tr.innerHTML = `
+        <td><b>${r.rep}</b></td>
+        <td>${r.calls}</td>
+        <td class="mono">${fmtTimeSec(r.asaSec)}</td>
+        <td class="mono">${fmtMin(r.avgCallbackMin)}</td>
+        <td>${r.vm}</td>
+      `;
+      tr.addEventListener("click", ()=> openDrawerRep(r));
+      body.appendChild(tr);
+    }
+  }
+
+  function renderCategoryBars(){
+    const host = $("categoryBars");
+    host.innerHTML = "";
+    const cats = MOCK.demand.categories.slice().sort((a,b)=>b.count-a.count);
+    const max = Math.max(...cats.map(x=>x.count)) || 1;
+
+    cats.forEach(c=>{
+      const row = document.createElement("div");
+      row.className = "bar-row click";
+      row.innerHTML = `
+        <div class="bar-label">
+          <span>${c.name}</span>
+          <span class="mono">${c.count}</span>
+        </div>
+        <div class="bar"><span style="width:${Math.round((c.count/max)*100)}%"></span></div>
+      `;
+      row.addEventListener("click", ()=> openDrawerCategory(c));
+      host.appendChild(row);
+    });
+  }
+
+  function renderOutcomeBars(){
+    const host = $("outcomeBars");
+    host.innerHTML = "";
+    const outs = MOCK.demand.outcomes.slice().sort((a,b)=>b.count-a.count);
+    const max = Math.max(...outs.map(x=>x.count)) || 1;
+
+    outs.forEach(o=>{
+      const row = document.createElement("div");
+      row.className = "bar-row click";
+      row.innerHTML = `
+        <div class="bar-label">
+          <span>${o.name}</span>
+          <span class="mono">${o.count}</span>
+        </div>
+        <div class="bar"><span style="width:${Math.round((o.count/max)*100)}%"></span></div>
+      `;
+      row.addEventListener("click", ()=> openModal("Outcome Detail: " + o.name, `
+        <div class="small">Assumed captured at call completion.</div>
+        <div class="divider"></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div class="panel">
+            <h3>Share</h3>
+            <div style="font-size:24px;font-weight:900;">${Math.round(o.pct*100)}%</div>
+            <div class="small" style="margin-top:10px;">Count: <b>${o.count}</b></div>
+          </div>
+          <div class="panel">
+            <h3>Why it matters</h3>
+            <div class="small">This supports executive reporting, staffing allocation, and grant narratives.</div>
+          </div>
+        </div>
+      `));
+      host.appendChild(row);
+    });
+  }
+
+  function renderProgramsTable(){
+    const body = $("tblPrograms");
+    body.innerHTML = "";
+    const rows = MOCK.demand.programs.slice().sort((a,b)=>b.referrals-a.referrals);
+    for(const p of rows){
+      const tr = document.createElement("tr");
+      tr.className = "click";
+      const pill = p.auditDays <= 90 ? "good" : (p.auditDays <= 120 ? "warn" : "bad");
+      tr.innerHTML = `
+        <td><b>${p.program}</b><div class="small">${p.owner}</div></td>
+        <td>${p.category}</td>
+        <td class="mono">${p.referrals}</td>
+        <td><span class="pill ${pill}">${p.auditDays}d audit</span></td>
+      `;
+      tr.addEventListener("click", ()=> openDrawerProgram(p));
+      body.appendChild(tr);
+    }
+  }
+
+  function renderAgingBars(){
+    const host = $("agingBars");
+    host.innerHTML = "";
+    const buckets = MOCK.governance.agingBuckets;
+    const max = Math.max(...buckets.map(x=>x.count)) || 1;
+
+    buckets.forEach(b=>{
+      const cls = b.name.includes(">120") ? "danger" : (b.name.includes("91") ? "warn" : "");
+      const row = document.createElement("div");
+      row.className = "bar-row click";
+      row.innerHTML = `
+        <div class="bar-label">
+          <span>${b.name}</span>
+          <span class="mono">${b.count}</span>
+        </div>
+        <div class="bar"><span class="${cls}" style="width:${Math.round((b.count/max)*100)}%"></span></div>
+      `;
+      row.addEventListener("click", ()=> openModalGovernance("Aging Bucket: " + b.name));
+      host.appendChild(row);
+    });
+  }
+
+  function renderCompletenessBars(){
+    const host = $("completenessBars");
+    host.innerHTML = "";
+    const items = MOCK.governance.completeness;
+    const max = Math.max(...items.map(x=>x.count)) || 1;
+
+    items.forEach(it=>{
+      const cls = it.name.includes("audit") ? "danger" : (it.name.includes("email") ? "warn" : "");
+      const row = document.createElement("div");
+      row.className = "bar-row click";
+      row.innerHTML = `
+        <div class="bar-label">
+          <span>${it.name}</span>
+          <span class="mono">${it.count}</span>
+        </div>
+        <div class="bar"><span class="${cls}" style="width:${Math.round((it.count/max)*100)}%"></span></div>
+      `;
+      row.addEventListener("click", ()=> openModalGovernance("Completeness: " + it.name));
+      host.appendChild(row);
+    });
+  }
+
+  function renderStaleUrgentTable(){
+    const body = $("tblStaleUrgent");
+    body.innerHTML = "";
+    const rows = MOCK.governance.staleUrgent.slice().sort((a,b)=>b.days-a.days);
+    for(const r of rows){
+      const tr = document.createElement("tr");
+      tr.className = "click";
+      const pill = r.days <= 90 ? "good" : (r.days <= 120 ? "warn" : "bad");
+      tr.innerHTML = `
+        <td><b>${r.program}</b></td>
+        <td><span class="pill ${r.urgency.toLowerCase().includes("urgent") ? "warn" : "good"}">${r.urgency}</span></td>
+        <td><span class="pill ${pill}">${r.days}</span></td>
+        <td>${r.owner}</td>
+      `;
+      tr.addEventListener("click", ()=> openDrawerVerifyTask(r));
+      body.appendChild(tr);
+    }
+  }
+
+  // region chart as simple horizontal bars in SVG
+  function renderRegionChart(){
+    const host = $("chartRegions");
+    const regions = MOCK.demand.regions;
+    const w = host.clientWidth || 600;
+    const h = host.clientHeight || 160;
+    const pad = 14;
+    const rowH = (h - pad*2) / regions.length;
+
+    const maxPct = Math.max(...regions.map(r=>r.pct)) || 1;
+
+    let svg = `<svg viewBox="0 0 ${w} ${h}">`;
+    svg += `<text x="${pad}" y="${14}" fill="rgba(148,163,184,.85)" font-size="11">Regions</text>`;
+    regions.forEach((r,i)=>{
+      const y = pad + i*rowH + 6;
+      const bw = (w - 140) * (r.pct/maxPct);
+      svg += `
+        <text x="${pad}" y="${y+12}" fill="#d1d5db" font-size="12">${r.name}</text>
+        <rect x="${120}" y="${y}" width="${bw}" height="14" rx="7" fill="rgba(45,212,191,.25)" stroke="rgba(45,212,191,.35)"/>
+        <text x="${120 + bw + 8}" y="${y+12}" fill="rgba(148,163,184,.85)" font-size="12">${Math.round(r.pct*100)}%</text>
+        <rect class="rhit" data-i="${i}" x="${120}" y="${y}" width="${w-130}" height="14" rx="7" fill="transparent"/>
+      `;
+    });
+    svg += `</svg>`;
+    host.innerHTML = svg;
+
+    host.querySelectorAll(".rhit").forEach(el=>{
+      el.style.cursor = "pointer";
+      el.addEventListener("click", ()=>{
+        const idx = Number(el.getAttribute("data-i"));
+        openDrawerRegion(regions[idx]);
+      });
+    });
+  }
+
+  function renderMissedChart(){
+    makeLineChart("chartMissed", MOCK.telephony.last7d, "missed", "d", () => openModalMissed());
+    $("chartMissed").addEventListener("click", ()=> openModalMissed());
+  }
+
+  function renderVerifyChart(){
+    const series = MOCK.governance.verifyThroughput.map(x=>({d:x.w, v:x.v}));
+    const host = $("chartVerify");
+    // map to yKey "v" and labelKey "d"
+    makeLineChart("chartVerify", series, "v", "d", (pt)=> {
+      openModal("Verification Week: " + pt.d, `
+        <div class="small">Assumed internal verification throughput.</div>
+        <div class="divider"></div>
+        <div class="panel">
+          <h3>Items verified</h3>
+          <div style="font-size:26px;font-weight:900;">${pt.v}</div>
+          <div class="small" style="margin-top:10px;">This can be attributed by staff owner, region, and category once workflow is implemented.</div>
+        </div>
+      `);
+    });
+  }
+
+  // -----------------------------
+  // Drilldowns: modal and drawer
+  // -----------------------------
+  function openOverlay(){
+    $("overlay").style.display = "block";
+    $("overlay").onclick = () => { closeModal(); closeDrawer(); };
+  }
+  function closeOverlay(){
+    if(!$("modal").style.display || $("modal").style.display === "none"){
+      if(!$("drawer").classList.contains("open")){
+        $("overlay").style.display = "none";
+        $("overlay").onclick = null;
+      }
+    }
+  }
+
+  function openModal(title, html){
+    $("modalTitle").textContent = title;
+    $("modalBody").innerHTML = html;
+    $("modal").style.display = "flex";
+    openOverlay();
+  }
+  function closeModal(){
+    $("modal").style.display = "none";
+    closeOverlay();
+  }
+  $("modalClose").addEventListener("click", closeModal);
+
+  function openDrawer(title, html){
+    $("drawerTitle").textContent = title;
+    $("drawerBody").innerHTML = html;
+    $("drawer").classList.add("open");
+    openOverlay();
+  }
+  function closeDrawer(){
+    $("drawer").classList.remove("open");
+    closeOverlay();
+  }
+  $("drawerClose").addEventListener("click", closeDrawer);
+
+  function openModalCalls(){
+    const rows = MOCK.telephony.last7d;
+    openModal("Call Volume Detail (7 days)", `
+      <div class="small">Assumed from Zoom call logs. Click any day point on the chart for drilldown.</div>
+      <div class="divider"></div>
+      <div class="panel">
+        <h3>Daily volume</h3>
+        <div class="chart" id="mVol"><div class="hint">Calls</div></div>
+      </div>
+      <div class="divider"></div>
+      <div class="panel">
+        <h3>Operational notes</h3>
+        <div class="small">This supports staffing and peak-hour scheduling decisions.</div>
+      </div>
+    `);
+    setTimeout(()=> makeLineChart("mVol", rows, "calls", "d", (pt)=>{
+      openModal("Day Detail: " + pt.d, `
+        <div class="panel">
+          <h3>Telephony</h3>
+          <div class="small">Calls: <b>${pt.calls}</b></div>
+          <div class="small">Avg wait: <b>${fmtTimeSec(pt.asa)}</b></div>
+          <div class="small">Missed: <b>${pt.missed}</b> | Voicemail: <b>${pt.vm}</b></div>
+          <div class="small">Abandon: <b>${Math.round(pt.abandon*100)}%</b></div>
+        </div>
+      `);
+    }), 0);
+  }
+
+  function openModalQueue(topic){
+    const t = MOCK.telephony.today;
+    openModal("Queue Detail: " + topic, `
+      <div class="small">Assumed Zoom queue metrics. This is what leadership would see for SLA monitoring.</div>
+      <div class="divider"></div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div class="panel">
+          <h3>Core KPIs</h3>
+          <div class="small">Answered rate</div>
+          <div style="font-size:22px;font-weight:900;">${fmtPct(t.answeredRate)}</div>
+          <div class="small" style="margin-top:10px;">Avg speed to answer</div>
+          <div style="font-size:22px;font-weight:900;">${fmtTimeSec(t.asaSec)}</div>
+          <div class="small" style="margin-top:10px;">Abandon rate</div>
+          <div style="font-size:22px;font-weight:900;">${fmtPct(t.abandonRate)}</div>
+        </div>
+        <div class="panel">
+          <h3>Actions</h3>
+          <div class="small">Possible automation:</div>
+          <ul class="small">
+            <li>Trigger callback queue when abandon risk exceeds threshold.</li>
+            <li>Route overflow calls to voicemail with SMS callback prompt.</li>
+            <li>Schedule staffing changes based on peak hour heatmap.</li>
+          </ul>
+        </div>
+      </div>
+    `);
+  }
+
+  function openModalMissed(){
+    const rows = MOCK.telephony.last7d;
+    openModal("Missed Calls and Voicemail", `
+      <div class="small">Assumed Zoom call logs. Missed calls increase callback burden and reduce service outcomes.</div>
+      <div class="divider"></div>
+      <div class="panel">
+        <h3>Missed calls trend</h3>
+        <div class="chart" id="mMissed"><div class="hint">Missed</div></div>
+      </div>
+      <div class="divider"></div>
+      <div class="panel">
+        <h3>Voicemail summary</h3>
+        <div class="small">Calls to voicemail today: <b>${MOCK.telephony.today.vm}</b></div>
+        <div class="small">Missed calls today: <b>${MOCK.telephony.today.missed}</b></div>
+        <div class="small">Avg callback time: <b>${fmtMin(MOCK.telephony.today.avgCallbackMin)}</b></div>
+      </div>
+    `);
+    setTimeout(()=> makeLineChart("mMissed", rows, "missed", "d", (pt)=>{
+      openModal("Missed Detail: " + pt.d, `
+        <div class="panel">
+          <h3>Counts</h3>
+          <div class="small">Missed: <b>${pt.missed}</b></div>
+          <div class="small">Voicemail: <b>${pt.vm}</b></div>
+          <div class="small">Avg wait: <b>${fmtTimeSec(pt.asa)}</b></div>
+        </div>
+      `);
+    }), 0);
+  }
+
+  function openModalCallbacks(){
+    openModal("Callback Performance", `
+      <div class="small">Assumed from Zoom call logs plus callback tracking.</div>
+      <div class="divider"></div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div class="panel">
+          <h3>Today</h3>
+          <div class="small">Avg callback time</div>
+          <div style="font-size:24px;font-weight:900;">${fmtMin(MOCK.telephony.today.avgCallbackMin)}</div>
+          <div class="small" style="margin-top:10px;">Voicemail calls</div>
+          <div style="font-size:24px;font-weight:900;">${MOCK.telephony.today.vm}</div>
+        </div>
+        <div class="panel">
+          <h3>What we can add</h3>
+          <ul class="small">
+            <li>Callback SLA timer per voicemail.</li>
+            <li>Queue for outbound callbacks assigned by rep.</li>
+            <li>Automated reminders for missed follow-ups.</li>
+          </ul>
+        </div>
+      </div>
+    `);
+  }
+
+  function openModalDemand(topic){
+    openModal("Demand Detail: " + topic, `
+      <div class="small">Assumed from app usage logs at call completion. This is what the spreadsheet alone cannot capture.</div>
+      <div class="divider"></div>
+      <div class="panel">
+        <h3>What this enables</h3>
+        <ul class="small">
+          <li>Top needs by region and population.</li>
+          <li>Which programs are actually being referred.</li>
+          <li>Outcomes and follow-up workload.</li>
+          <li>Grant and executive reporting with defensible numbers.</li>
+        </ul>
+      </div>
+    `);
+  }
+
+  function openModalGovernance(topic){
+    openModal("Governance Detail: " + topic, `
+      <div class="small">Assumed from the Audit Date field in the resource sheet and completeness checks.</div>
+      <div class="divider"></div>
+      <div class="panel">
+        <h3>Governance controls</h3>
+        <ul class="small">
+          <li>Goal: verify each resource within 90 days.</li>
+          <li>Auto-generated weekly verification worklist.</li>
+          <li>Flags for missing contact fields.</li>
+          <li>Executive view for accountability and risk management.</li>
+        </ul>
+      </div>
+    `);
+  }
+
+  function openDrawerRep(r){
+    openDrawer("Rep Drilldown: " + r.rep, `
+      <div class="panel">
+        <h3>Telephony</h3>
+        <div class="small">Calls: <b>${r.calls}</b></div>
+        <div class="small">Avg wait: <b>${fmtTimeSec(r.asaSec)}</b></div>
+        <div class="small">Avg callback: <b>${fmtMin(r.avgCallbackMin)}</b></div>
+        <div class="small">Voicemail: <b>${r.vm}</b></div>
+      </div>
+      <div class="divider"></div>
+      <div class="panel">
+        <h3>Outcomes</h3>
+        <div class="small">Assisted: <b>${r.outcomes.assisted}</b></div>
+        <div class="small">Referred: <b>${r.outcomes.referred}</b></div>
+        <div class="small">Warm handoff: <b>${r.outcomes.warm}</b></div>
+        <div class="small">Follow-up scheduled: <b>${r.outcomes.follow}</b></div>
+      </div>
+      <div class="divider"></div>
+      <button class="btn primary" onclick="openModal('Session Timeline (Prototype)', '<div class=&quot;small&quot;>This would show a chronological log of searches, program selections, and call completion events.</div>')">🧭 Open session timeline</button>
+    `);
+  }
+
+  function openDrawerCategory(c){
+    openDrawer("Category Drilldown: " + c.name, `
+      <div class="panel">
+        <h3>Summary</h3>
+        <div class="small">Requests: <b>${c.count}</b></div>
+        <div class="small">Share: <b>${Math.round(c.pct*100)}%</b></div>
+      </div>
+      <div class="divider"></div>
+      <div class="panel">
+        <h3>Subcategories</h3>
+        ${c.sub.map(s=>`<div class="small">${s.n}: <b>${s.c}</b></div>`).join("")}
+      </div>
+      <div class="divider"></div>
+      <button class="btn primary" onclick="openModal('Program Recommendations (Prototype)', '<div class=&quot;small&quot;>This could rank programs by region, urgency, and success outcomes.</div>')">📌 Show recommended programs</button>
+    `);
+  }
+
+  function openDrawerProgram(p){
+    const pill = p.auditDays <= 90 ? "good" : (p.auditDays <= 120 ? "warn" : "bad");
+    openDrawer("Program Profile", `
+      <div class="panel">
+        <h3>${p.program}</h3>
+        <div class="small">Category: <b>${p.category}</b></div>
+        <div class="small">Region: <b>${p.region}</b></div>
+        <div class="small">Owner: <b>${p.owner}</b></div>
+        <div class="small" style="margin-top:10px;">Audit: <span class="pill ${pill}">${p.auditDays} days</span></div>
+        <div class="small">Urgency: <span class="pill ${p.urgency.toLowerCase().includes("urgent") ? "warn" : "good"}">${p.urgency}</span></div>
+      </div>
+      <div class="divider"></div>
+      <div class="panel">
+        <h3>Operational impact</h3>
+        <div class="small">Referrals (period): <b>${p.referrals}</b></div>
+        <div class="small">If audit is stale, reps risk giving incorrect instructions and creating callbacks.</div>
+      </div>
+      <div class="divider"></div>
+      <button class="btn primary" onclick="openDrawerVerifyTask({program:'${escapeHtml(p.program)}', urgency:'${escapeHtml(p.urgency)}', days:${p.auditDays}, owner:'${escapeHtml(p.owner)}'})">✅ Create verification task</button>
+    `);
+  }
+
+  function openDrawerRegion(r){
+    openDrawer("Region Drilldown: " + r.name, `
+      <div class="panel">
+        <h3>Demand share</h3>
+        <div style="font-size:26px;font-weight:900;">${Math.round(r.pct*100)}%</div>
+        <div class="small">Top needs: <b>${r.top.join(", ")}</b></div>
+      </div>
+      <div class="divider"></div>
+      <div class="panel">
+        <h3>What we can show next</h3>
+        <ul class="small">
+          <li>Top programs selected in this region.</li>
+          <li>Wait times and abandonment for region-tagged calls.</li>
+          <li>Referral outcomes by region.</li>
+        </ul>
+      </div>
+    `);
+  }
+
+  function openDrawerVerifyTask(r){
+    const pill = r.days <= 90 ? "good" : (r.days <= 120 ? "warn" : "bad");
+    openDrawer("Verification Task", `
+      <div class="panel">
+        <h3>${escapeHtml(r.program)}</h3>
+        <div class="small">Owner: <b>${escapeHtml(r.owner)}</b></div>
+        <div class="small">Urgency: <b>${escapeHtml(r.urgency)}</b></div>
+        <div class="small">Audit age: <span class="pill ${pill}">${r.days} days</span></div>
+      </div>
+      <div class="divider"></div>
+      <div class="panel">
+        <h3>Verification checklist</h3>
+        <ul class="small">
+          <li>Confirm phone, hours, and intake process.</li>
+          <li>Confirm eligibility and referral requirements.</li>
+          <li>Confirm website and email.</li>
+          <li>Update notes with any exclusions or special instructions.</li>
+          <li>Set new Audit Date and capture verifier name.</li>
+        </ul>
+      </div>
+      <div class="divider"></div>
+      <button class="btn primary" onclick="openModal('Task Export (Prototype)', '<div class=&quot;small&quot;>This would export a daily or weekly worklist PDF for staff assignments.</div>')">📄 Export task card</button>
+    `);
+  }
+
+  function openDrawerOverdue(){
+    const overdue = MOCK.demand.programs.filter(p=>p.auditDays > 90).sort((a,b)=>b.auditDays-a.auditDays);
+    openDrawer("Overdue Resources (Audit > 90 days)", `
+      <div class="small">This list can be generated daily or weekly for staff verification worklists.</div>
+      <div class="divider"></div>
+      <div style="max-height:58vh; overflow:auto;">
+        <table>
+          <thead><tr><th>Program</th><th>Owner</th><th>Audit age</th><th>Urgency</th></tr></thead>
+          <tbody>
+            ${overdue.map(p=>{
+              const pill = p.auditDays <= 120 ? "warn" : "bad";
+              return `
+                <tr class="click" onclick="openDrawerProgram({program:'${escapeJs(p.program)}', category:'${escapeJs(p.category)}', referrals:${p.referrals}, region:'${escapeJs(p.region)}', auditDays:${p.auditDays}, urgency:'${escapeJs(p.urgency)}', owner:'${escapeJs(p.owner)}'})">
+                  <td><b>${escapeHtml(p.program)}</b></td>
+                  <td>${escapeHtml(p.owner)}</td>
+                  <td><span class="pill ${pill}">${p.auditDays}d</span></td>
+                  <td>${escapeHtml(p.urgency)}</td>
+                </tr>
+              `;
+            }).join("")}
+          </tbody>
+        </table>
+      </div>
+      <div class="divider"></div>
+      <button class="btn primary" onclick="openModal('Verification List Export (Prototype)', '<div class=&quot;small&quot;>This would produce a PDF and optionally email it to assigned staff on a schedule.</div>')">🗓 Export weekly verification list</button>
+    `);
+  }
+
+  // -----------------------------
+  // Governance buttons
+  // -----------------------------
+  $("btnOverdue").addEventListener("click", openDrawerOverdue);
+  $("btnGenList").addEventListener("click", ()=>{
+    openModal("Generate Verification List (Prototype)", `
+      <div class="small">In production: scheduled daily or weekly export of Audit Date aging resources.</div>
+      <div class="divider"></div>
+      <div class="panel">
+        <h3>Proposed rules</h3>
+        <ul class="small">
+          <li>Target freshness: ≤ 90 days.</li>
+          <li>Daily list: items > 120 days and high urgency.</li>
+          <li>Weekly list: all items > 90 days, assigned by owner.</li>
+          <li>Completion logs: verifier name, verification date, change notes.</li>
+        </ul>
+      </div>
+    `);
+  });
+
+  // -----------------------------
+  // Export snapshot (prototype)
+  // -----------------------------
+  $("exportBtn").addEventListener("click", ()=>{
+    openModal("Export Snapshot (Prototype)", `
+      <div class="small">In production: export a PDF or CSV snapshot of KPIs and drilldowns for leadership.</div>
+      <div class="divider"></div>
+      <div class="panel">
+        <h3>Included</h3>
+        <ul class="small">
+          <li>Telephony KPIs (Zoom)</li>
+          <li>Demand and outcomes (App logging)</li>
+          <li>Governance freshness and overdue list</li>
+        </ul>
+      </div>
+    `);
+  });
+
+  // -----------------------------
+  // Volume chart point drilldown
+  // -----------------------------
+  function renderVolumeChart(){
+    const rows = MOCK.telephony.last7d;
+    makeLineChart("chartVolume", rows, "calls", "d", (pt)=>{
+      openModal("Telephony Day Drilldown: " + pt.d, `
+        <div class="small">Assumed Zoom metrics for the day.</div>
+        <div class="divider"></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div class="panel">
+            <h3>Volume</h3>
+            <div style="font-size:26px;font-weight:900;">${pt.calls}</div>
+            <div class="small" style="margin-top:10px;">Missed: <b>${pt.missed}</b> | Voicemail: <b>${pt.vm}</b></div>
+          </div>
+          <div class="panel">
+            <h3>Queue</h3>
+            <div class="small">Avg wait</div>
+            <div style="font-size:26px;font-weight:900;">${fmtTimeSec(pt.asa)}</div>
+            <div class="small" style="margin-top:10px;">Abandon: <b>${Math.round(pt.abandon*100)}%</b></div>
+          </div>
+        </div>
+      `);
+    });
+  }
+
+  // -----------------------------
+  // Governance gauge
+  // -----------------------------
+  function renderGauge(){
+    const g = MOCK.governance.freshness;
+    makeGauge("gauge", g.lte90);
+    $("gaugeNote").innerHTML = `
+      Current: <b>${fmtPct(g.lte90)}</b> within 90 days.
+      Overdue: <b>${fmtPct(1-g.lte90)}</b>.
+      Average age: <b>${g.avgAge} days</b>.
+    `;
+  }
+
+  // -----------------------------
+  // Pop donut
+  // -----------------------------
+  function renderPop(){
+    makeDonut("chartPop", MOCK.demand.populations);
+  }
+
+  // -----------------------------
+  // Search filter (prototype)
+  // -----------------------------
+  $("q").addEventListener("input", ()=>{
+    const q = $("q").value.trim().toLowerCase();
+    if(!q){
+      renderProgramsTable();
+      renderAgentsTable();
+      return;
+    }
+    // filter programs table and agents table by query
+    const pBody = $("tblPrograms");
+    pBody.innerHTML = "";
+    MOCK.demand.programs
+      .filter(p => (p.program + " " + p.category + " " + p.region + " " + p.owner).toLowerCase().includes(q))
+      .sort((a,b)=>b.referrals-a.referrals)
+      .forEach(p=>{
+        const tr = document.createElement("tr");
+        tr.className = "click";
+        const pill = p.auditDays <= 90 ? "good" : (p.auditDays <= 120 ? "warn" : "bad");
+        tr.innerHTML = `
+          <td><b>${p.program}</b><div class="small">${p.owner}</div></td>
+          <td>${p.category}</td>
+          <td class="mono">${p.referrals}</td>
+          <td><span class="pill ${pill}">${p.auditDays}d audit</span></td>
+        `;
+        tr.addEventListener("click", ()=> openDrawerProgram(p));
+        pBody.appendChild(tr);
+      });
+
+    const aBody = $("tblAgents");
+    aBody.innerHTML = "";
+    MOCK.telephony.agents
+      .filter(r => r.rep.toLowerCase().includes(q))
+      .sort((a,b)=>b.calls-a.calls)
+      .forEach(r=>{
+        const tr = document.createElement("tr");
+        tr.className = "click";
+        tr.innerHTML = `
+          <td><b>${r.rep}</b></td>
+          <td>${r.calls}</td>
+          <td class="mono">${fmtTimeSec(r.asaSec)}</td>
+          <td class="mono">${fmtMin(r.avgCallbackMin)}</td>
+          <td>${r.vm}</td>
+        `;
+        tr.addEventListener("click", ()=> openDrawerRep(r));
+        aBody.appendChild(tr);
+      });
+  });
+
+  // -----------------------------
+  // Live mode (prototype animation)
+  // -----------------------------
+  let liveOn = false;
+  let liveTimer = null;
+
+  $("toggleLive").addEventListener("click", ()=>{
+    liveOn = !liveOn;
+    $("toggleLive").textContent = liveOn ? "⏱ Live: On" : "⏱ Live: Off";
+    $("toggleLive").classList.toggle("primary", liveOn);
+
+    if(liveOn){
+      liveTimer = setInterval(()=>{
+        // nudge a few values to simulate a live feed
+        MOCK.telephony.today.calls += Math.random() < 0.55 ? 1 : 0;
+        MOCK.telephony.today.vm += Math.random() < 0.12 ? 1 : 0;
+        MOCK.telephony.today.asaSec = clamp(MOCK.telephony.today.asaSec + (Math.random() < 0.5 ? 1 : -1), 25, 95);
+        MOCK.telephony.today.abandonRate = clamp(MOCK.telephony.today.abandonRate + (Math.random() < 0.5 ? 0.002 : -0.002), 0.03, 0.16);
+        MOCK.telephony.today.answeredRate = clamp(1 - MOCK.telephony.today.abandonRate - (MOCK.telephony.today.vm / MOCK.telephony.today.calls), 0.70, 0.98);
+        setTimestamp();
+        renderTelephonyKPIs();
+        renderQueueBars();
+      }, 1600);
+    } else {
+      clearInterval(liveTimer);
+      liveTimer = null;
+      setTimestamp();
+    }
+  });
+
+  // -----------------------------
+  // Sortable agent table header clicks
+  // -----------------------------
+  document.addEventListener("click", (e)=>{
+    const th = e.target.closest("th[data-sort]");
+    if(!th) return;
+    const key = th.getAttribute("data-sort");
+    const agents = MOCK.telephony.agents;
+    const dir = th.getAttribute("data-dir") === "asc" ? "desc" : "asc";
+    th.setAttribute("data-dir", dir);
+
+    agents.sort((a,b)=>{
+      const va = key==="rep" ? a.rep : (key==="calls" ? a.calls : (key==="asa" ? a.asaSec : (key==="cb" ? a.avgCallbackMin : a.vm)));
+      const vb = key==="rep" ? b.rep : (key==="calls" ? b.calls : (key==="asa" ? b.asaSec : (key==="cb" ? b.avgCallbackMin : b.vm)));
+      if(typeof va === "string") return dir==="asc" ? va.localeCompare(vb) : vb.localeCompare(va);
+      return dir==="asc" ? va - vb : vb - va;
+    });
+    renderAgentsTable();
+  });
+
+  // -----------------------------
+  // Init
+  // -----------------------------
+  function escapeHtml(s){ return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
+  function escapeJs(s){ return String(s).replaceAll("\\","\\\\").replaceAll("'","\\'"); }
+
+  function init(){
+    setTimestamp();
+    renderTelephonyKPIs();
+    renderDemandKPIs();
+    renderGovKPIs();
+
+    renderVolumeChart();
+    renderHeatmap();
+    renderQueueBars();
+    renderMissedChart();
+    renderAgentsTable();
+
+    renderCategoryBars();
+    renderRegionChart();
+    renderPop();
+    renderOutcomeBars();
+    renderProgramsTable();
+
+    renderGauge();
+    renderAgingBars();
+    renderCompletenessBars();
+    renderStaleUrgentTable();
+    renderVerifyChart();
+  }
+  window.addEventListener("load", init);
+
+  // Close modal on ESC
+  window.addEventListener("keydown", (e)=>{
+    if(e.key === "Escape"){
+      closeModal();
+      closeDrawer();
+    }
+  });
+</script>
+
+</body>
+</html>
