@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Anchor Point Navigation Framework</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+
+body{
+margin:0;
+font-family:system-ui,Segoe UI,Roboto;
+background:#020617;
+color:white;
+}
+
+header{
+padding:90px 20px;
+text-align:center;
+background:linear-gradient(135deg,#1e3a8a,#06b6d4);
+}
+
+h1{
+font-size:56px;
+margin:0;
+}
+
+.subtitle{
+font-size:22px;
+opacity:.9;
+margin-top:10px;
+}
+
+.section{
+padding:70px 8%;
+}
+
+.section-title{
+text-align:center;
+font-size:34px;
+color:#38bdf8;
+margin-bottom:50px;
+}
+
+.diagram-center{
+text-align:center;
+font-size:20px;
+line-height:2em;
+}
+
+.diagram-box{
+display:inline-block;
+padding:14px 24px;
+background:#0f172a;
+border-radius:10px;
+margin:8px;
+}
+
+.highlight{
+background:#0284c7;
+font-weight:bold;
+}
+
+.flowline{
+opacity:.5;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:25px;
+}
+
+.card{
+background:#0f172a;
+padding:26px;
+border-radius:14px;
+transition:.25s;
+}
+
+.card:hover{
+transform:translateY(-6px);
+background:#1e293b;
+}
+
+.center-ring{
+display:flex;
+justify-content:center;
+align-items:center;
+flex-wrap:wrap;
+gap:40px;
+margin-top:40px;
+}
+
+.core{
+width:240px;
+height:240px;
+border-radius:50%;
+background:#0369a1;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+font-size:22px;
+font-weight:bold;
+}
+
+.spoke{
+background:#0f172a;
+padding:18px 24px;
+border-radius:10px;
+}
+
+.tech-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:25px;
+}
+
+.tech{
+background:#1e293b;
+padding:22px;
+border-radius:12px;
+text-align:center;
+}
+
+.footer{
+text-align:center;
+padding:40px;
+font-size:13px;
+opacity:.5;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>Anchor Point</h1>
+<div class="subtitle">Regional Navigation Decision Framework</div>
+</header>
+
+
+<section class="section">
+
+<div class="section-title">Call Routing Decision Engine</div>
+
+<div class="diagram-center">
+
+<div class="diagram-box">Incoming Calls</div>
+<div class="flowline">│</div>
+
+<div class="diagram-box highlight">Anchor Point Line</div>
+<div class="flowline">│</div>
+
+<div>
+
+<div class="diagram-box">Household Profile</div>
+<div class="diagram-box">Urgency Tier</div>
+<div class="diagram-box">Location Check</div>
+
+</div>
+
+<div class="flowline">└──────── Decision Engine ────────┘</div>
+
+<div>
+
+<div class="diagram-box">Shelter Providers</div>
+<div class="diagram-box">Treatment Providers</div>
+<div class="diagram-box">Resource Network</div>
+
+</div>
+
+<div class="flowline">│</div>
+
+<div class="diagram-box highlight">
+Best-Fit Referral Routing
+</div>
+
+<div class="flowline">│</div>
+
+<div class="diagram-box highlight">
+Verified Next Step
+</div>
+
+</div>
+
+</section>
+
+
+<section class="section">
+
+<div class="section-title">Caller Need Is the Center of the System</div>
+
+<div class="center-ring">
+
+<div class="spoke">Emergency Shelter</div>
+<div class="spoke">Family Housing</div>
+<div class="spoke">Detox Services</div>
+
+<div class="core">
+Caller Need
+</div>
+
+<div class="spoke">Food Access</div>
+<div class="spoke">Documentation Help</div>
+<div class="spoke">Transportation</div>
+
+</div>
+
+</section>
+
+
+<section class="section">
+
+<div class="section-title">Top 10 Anchor Point Call Scenarios</div>
+
+<div class="grid">
+
+<div class="card">Single adult shelter request</div>
+<div class="card">Family shelter request</div>
+<div class="card">Detox placement request</div>
+<div class="card">Domestic violence safety routing</div>
+<div class="card">Hospital discharge coordination</div>
+<div class="card">Law enforcement drop-off inquiry</div>
+<div class="card">Church-assisted referral navigation</div>
+<div class="card">Food insecurity request</div>
+<div class="card">Returning participant re-entry options</div>
+<div class="card">Guided triage for unclear needs</div>
+
+</div>
+
+</section>
+
+
+<section class="section">
+
+<div class="section-title">What Anchor Point Captures From Every Call</div>
+
+<div class="grid">
+
+<div class="card">Caller Type</div>
+<div class="card">Geographic Eligibility</div>
+<div class="card">Urgency Tier</div>
+<div class="card">Household Profile</div>
+<div class="card">Service Domain</div>
+<div class="card">Referral Destination</div>
+<div class="card">Follow-Up Ownership</div>
+
+</div>
+
+</section>
+
+
+<section class="section">
+
+<div class="section-title">Technology Architecture Overview</div>
+
+<div class="tech-grid">
+
+<div class="tech">
+Call Intake Interface
+</div>
+
+<div class="tech">
+Decision Routing Logic Layer
+</div>
+
+<div class="tech">
+Provider Directory Database
+</div>
+
+<div class="tech">
+Encounter Logging Dataset
+</div>
+
+<div class="tech">
+Analytics Dashboard
+</div>
+
+<div class="tech">
+Partner Coordination Layer
+</div>
+
+</div>
+
+</section>
+
+
+<section class="section">
+
+<div class="section-title">Anchor Point Role in the Regional Ecosystem</div>
+
+<div class="grid">
+
+<div class="card">Provider-Neutral Navigation Hub</div>
+<div class="card">Multi-Agency Coordination Layer</div>
+<div class="card">Regional Needs Visibility Engine</div>
+<div class="card">Scalable Across Counties</div>
+
+</div>
+
+</section>
+
+
+<section class="section">
+
+<div class="section-title">Success Definition</div>
+
+<div class="diagram-center">
+
+<div class="diagram-box highlight">
+Every Caller Leaves With<br>
+A Verified Next Step
+</div>
+
+</div>
+
+</section>
+
+
+<div class="footer">
+Anchor Point Framework Preview • Initial Stakeholder Briefing Version - GEM
+</div>
+
+</body>
+</html>
